@@ -5,15 +5,37 @@
     <title>Hello World!</title>
   </head>
   <body>
-    <h1>Hello World!</h1>
-    <!-- All of the Node.js APIs are available in this renderer process. -->
-    We are using Node.js <script>document.write(process.versions.node)</script>,
-    Chromium <script>document.write(process.versions.chrome)</script>,
-    and Electron <script>document.write(process.versions.electron)</script>.
+    <h1>Armonia</h1>
+    Electron <script>document.write(process.versions.electron)</script>.
+    Node <script>document.write(process.versions.node)</script>.
+    <div id="songlist">
+        <ul>
+            <li>yes</li>
+        </ul>
+    </div>
   </body>
 
   <script>
     // You can also require other files to run in this process
-    require('./renderer.js')
+    var Player = require('player');
+
+    window.$ = window.jQuery = require("./js/jquery.js");
+    var sqlite3 = require('sqlite3').verbose();
+    var db = new sqlite3.Database('armonia.db');
+
+    db.each("SELECT id AS id, title, artist, genre, location FROM song", function(err, row) {
+//         console.log(row.id + ": " + row.title);
+        $("#songlist ul").append("<li data-loc=\""+row.location+"\">"+row.id+"==="+row.title+"</li><br>")
+    });
+
+    $(function () {
+        $("ul").on("click", "li", function () {
+            let path = $(this).attr("data-loc");
+            var player = new Player(path);
+            player.stop();
+            player.play();
+            console.log(path);
+        });
+    });
   </script>
 </html>
