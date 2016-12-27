@@ -8,33 +8,42 @@
     <h1>Armonia</h1>
     Electron <script>document.write(process.versions.electron)</script>.
     Node <script>document.write(process.versions.node)</script>.
+    <div id="stop">Stop</div>
     <div id="songlist">
-        <ul>
-            <li>yes</li>
-        </ul>
+        <ol></ol>
     </div>
   </body>
 
   <script>
-    // You can also require other files to run in this process
-    var Player = require('player');
+      window.$ = window.jQuery = require("./js/jquery.js");
 
-    window.$ = window.jQuery = require("./js/jquery.js");
+      var player;
+    var playing = false;
+
     var sqlite3 = require('sqlite3').verbose();
     var db = new sqlite3.Database('armonia.db');
 
-    db.each("SELECT id AS id, title, artist, genre, location FROM song", function(err, row) {
+    db.each("SELECT id AS id, title, artist, genre, location FROM song ORDER BY title", function(err, row) {
 //         console.log(row.id + ": " + row.title);
-        $("#songlist ul").append("<li data-loc=\""+row.location+"\">"+row.id+"==="+row.title+"</li><br>")
+        $("#songlist ol").append("<li data-loc=\""+row.location+"\">"+row.title+"</li><br>")
     });
 
     $(function () {
-        $("ul").on("click", "li", function () {
+        $("ol").on("click", "li", function () {
+            if(playing) {
+              player.pause();
+              playing = false;
+              console.log("Stopped");
+            }
             let path = $(this).attr("data-loc");
-            var player = new Player(path);
-            player.stop();
+            player = new Audio(path);
             player.play();
-            console.log(path);
+            console.log("playing "+path);
+            playing = true;
+        });
+        $("#stop").click(function () {
+            player.pause();
+            playing = false;
         });
     });
   </script>
