@@ -9,6 +9,8 @@
     Electron <script>document.write(process.versions.electron)</script>.
     Node <script>document.write(process.versions.node)</script>.
     <div id="stop">Stop</div>
+    <div id="dur">Get duration</div>
+    <div id="cur">Get current time</div>
     <div id="songlist">
         <ol></ol>
     </div>
@@ -45,6 +47,8 @@
             player.pause();
             playing = false;
         });
+      $("#dur").click(()=>console.log(player.duration));
+      $("#cur").click(()=>console.log(player.currentTime));
     });
   </script>
 </html>
