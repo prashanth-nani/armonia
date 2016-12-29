@@ -35,31 +35,38 @@ module.exports.processChanges = function (watchPath) {
 
     function writeChangesToFile() {
         console.log("Writing to file");
-        fs.exists(changeFilePath, (exists)=>{
-            if(exists){
+        fs.exists(changeFilePath, (exists)=> {
+            if (exists) {
                 console.log("File exists!!");
-               fs.readFileSync(changeFilePath, (err, data)=>{
-                 if(err) throw err;
-                   else{
-                       changesObj = JSON.parse(data);
-                 }
-               });
+                fs.readFileSync(changeFilePath, (err, data)=> {
+                    if (err) throw err;
+                    changesObj = JSON.parse(data);
+                });
+            } else {
+                console.log("File doesn't exist");
+                changesObj = {added: [], removed: [], changed: []};
             }
+            console.log(changesObj);
             changesObj.added = changesObj.added.concat(addedList);
             changesObj.removed = changesObj.removed.concat(removedList);
             changesObj.changed = changesObj.changed.concat(changedList);
 
-            fs.writeFile(changeFilePath, JSON.stringify(changesObj), 'utf8', err=>{
-                if(err) throw err;
+            fs.writeFile(changeFilePath, JSON.stringify(changesObj), 'utf8', err=> {
+                if (err) throw err;
             });
             clearInterval(handle);
+            timerOn = false;
+            console.log("timer cleared after writing");
         });
     }
 
     let addFile = function (path) {
-        if(timerOn)
-            clearTimeout(handle);
-        handle = setTimeout(writeChangesToFile, 5000);
+        if (timerOn) {
+            clearInterval(handle);
+            timerOn = false;
+            console.log("timer cleared");
+        }
+        handle = setInterval(writeChangesToFile, 5000);
         console.log("Interval set");
         timerOn = true;
         addedList.push(path);
@@ -68,47 +75,11 @@ module.exports.processChanges = function (watchPath) {
     };
 
     let changeFile = function (path) {
-        while (true) {
-            if (!changeFileLocked) {
-                changeFileLocked = true;
-                fs.readFile(changeFilePath, (err, data)=> {
-                    if (err) {
-                        throw err;
-                    } else {
-                        changesObj = JSON.parse(data);
-                        changesObj.changed.push(path);
-                        fs.writeFileSync(changeFilePath, JSON.stringify(changesObj), err => {
-                            if (err) throw err;
-                        });
-                        changeFileLocked = false;
-                        log(`File ${path} has been changed`);
-                        return;
-                    }
-                });
-            }
-        }
+        console.log("file changed");
     };
 
     let deleteFile = function (path) {
-        while (true) {
-            if (!changeFileLocked) {
-                changeFileLocked = true;
-                fs.readFile(changeFilePath, (err, data)=> {
-                    if (err) {
-                        throw err;
-                    } else {
-                        changesObj = JSON.parse(data);
-                        changesObj.removed.push(path);
-                        fs.writeFileSync(changeFilePath, JSON.stringify(changesObj), err => {
-                            if (err) throw err;
-                        });
-                        changeFileLocked = false;
-                        log(`File ${path} has been removed`);
-                        return;
-                    }
-                });
-            }
-        }
+        console.log("File removed");
     };
 
     let addDir = function (path) {
