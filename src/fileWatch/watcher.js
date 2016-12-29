@@ -1,46 +1,141 @@
-'use strict';
+module.exports.processChanges = function (watchPath) {
+    'use strict';
 
-class MusicWatch {
+    const chokidar = require('chokidar');
+    const path = require('path');
+    const fs = require('fs');
 
-    constructor(fol) {
-        this.fol = fol;
-        var chokidar = require('chokidar');
+    let changeFilePath = path.join(__dirname, "..", "..", "changes.json");
+    // fs.exists(changeFilePath, function (exists) {
+    //     if (exists) {
+    //         console.log("Change recording file already exists");
+    //     } else {
+    //         fs.writeFile(changeFilePath, JSON.stringify({added: [], removed: [], changed: []}), err => {
+    //             if (err) throw err;
+    //         });
+    //         console.log("Change recording file created");
+    //     }
+    // });
 
-        this.watcher = chokidar.watch(fol, {
-            ignored: /(^|[\/\\])\../,
-            persistent: true
+
+    let changesObj = {added: [], removed: [], changed: []};
+    let changeFileLocked = false;
+
+    let watcher = chokidar.watch(watchPath, {
+        ignored: /(^|[\/\\])\../,
+        persistent: true
+    });
+
+    var log = console.log.bind(console);
+    let handle;
+    let timerOn = false;
+    let changedList = [];
+    let removedList = [];
+    let addedList = [];
+
+    function writeChangesToFile() {
+        console.log("Writing to file");
+        fs.exists(changeFilePath, (exists)=>{
+            if(exists){
+                console.log("File exists!!");
+               fs.readFileSync(changeFilePath, (err, data)=>{
+                 if(err) throw err;
+                   else{
+                       changesObj = JSON.parse(data);
+                 }
+               });
+            }
+            changesObj.added = changesObj.added.concat(addedList);
+            changesObj.removed = changesObj.removed.concat(removedList);
+            changesObj.changed = changesObj.changed.concat(changedList);
+
+            fs.writeFile(changeFilePath, JSON.stringify(changesObj), 'utf8', err=>{
+                if(err) throw err;
+            });
+            clearInterval(handle);
         });
+    }
 
-        var log = console.log.bind(console);
+    let addFile = function (path) {
+        if(timerOn)
+            clearTimeout(handle);
+        handle = setTimeout(writeChangesToFile, 5000);
+        console.log("Interval set");
+        timerOn = true;
+        addedList.push(path);
+        log(`File ${path} has been added`);
+        // log(`List is ${addedList}`);
+    };
 
-        this.watcher
-            .on('add', path => log(`File ${path} has been added`))
-            .on('change', path => log(`File ${path} has been changed`))
-            .on('unlink', path => log(`File ${path} has been removed`));
+    let changeFile = function (path) {
+        while (true) {
+            if (!changeFileLocked) {
+                changeFileLocked = true;
+                fs.readFile(changeFilePath, (err, data)=> {
+                    if (err) {
+                        throw err;
+                    } else {
+                        changesObj = JSON.parse(data);
+                        changesObj.changed.push(path);
+                        fs.writeFileSync(changeFilePath, JSON.stringify(changesObj), err => {
+                            if (err) throw err;
+                        });
+                        changeFileLocked = false;
+                        log(`File ${path} has been changed`);
+                        return;
+                    }
+                });
+            }
+        }
+    };
+
+    let deleteFile = function (path) {
+        while (true) {
+            if (!changeFileLocked) {
+                changeFileLocked = true;
+                fs.readFile(changeFilePath, (err, data)=> {
+                    if (err) {
+                        throw err;
+                    } else {
+                        changesObj = JSON.parse(data);
+                        changesObj.removed.push(path);
+                        fs.writeFileSync(changeFilePath, JSON.stringify(changesObj), err => {
+                            if (err) throw err;
+                        });
+                        changeFileLocked = false;
+                        log(`File ${path} has been removed`);
+                        return;
+                    }
+                });
+            }
+        }
+    };
+
+    let addDir = function (path) {
+        log(`Dir ${path} has been added`)
+    };
+
+    let removeDir = function (path) {
+        log(`Directory ${path} has been removed`)
+    };
+
+    watcher
+        .on('add', addFile)
+        .on('change', changeFile)
+        .on('unlink', deleteFile);
 
 // More possible events.
-        this.watcher
-            .on('addDir', path => log(`Directory ${path} has been added`))
-            .on('unlinkDir', path => log(`Directory ${path} has been removed`))
-            .on('error', error => log(`Watcher error: ${error}`))
-            .on('ready', () => log('Initial scan complete. Ready for changes'))
-            .on('raw', (event, path, details) => {
-                log('Raw event info:', event, path, details);
-            });
-
-// 'add', 'addDir' and 'change' events also receive stat() results as second
-// argument when available: http://nodejs.org/api/fs.html#fs_class_fs_stats
-        this.watcher.on('change', (path, stats) => {
-            if (stats) console.log(`File ${path} changed size to ${stats.size}`);
+    watcher
+        .on('addDir', addDir)
+        .on('unlinkDir', removeDir)
+        .on('error', error => log(`Watcher error: ${error}`))
+        .on('ready', () => log('Initial scan complete. Ready for changes'))
+        .on('raw', (event, path, details) => {
+            log('Raw event info:', event, path, details);
         });
 
-        setInterval(this.getList, 1000);
-    }
-
-    getList(){
-
-    }
-
+    //Getting stats when available
+    watcher.on('change', (path, stats) => {
+        if (stats) console.log(`File ${path} changed size to ${stats.size}`);
+    });
 }
-
-var watch = new MusicWatch("/home/prashanth/Desktop/test");
