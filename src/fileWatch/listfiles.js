@@ -42,3 +42,4 @@ let addedList = newList.filter(x => oldList.indexOf(x) < 0);
 
 console.log("Deleted " + removedList);
 console.log("Added " + addedList);
+console.log(newList.indexOf)

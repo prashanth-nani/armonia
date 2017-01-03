@@ -39,21 +39,7 @@ db.serialize(function() {
     var files = getFiles("/media/prashanth/body/Music");
     var album_stmt = db.prepare("INSERT OR IGNORE INTO album (album_name, album_artist, year, total, album_art) VALUES (?, ?, ?, ?, ?)");
     var song_stmt = db.prepare("INSERT INTO song(title, artist, genre, location, track, album_id) VALUES (?, ?, ?, ?, ?, ?)");
-    files.forEach(function (file){
-        if(file.endsWith('.mp3')) {
-            var readableStream = fs.createReadStream(file);
-            mm(readableStream, function (err, metadata) {
-                if (err) throw err;
-                console.log(file + " "+metadata.year);
-                // console.log();
-                readableStream.close();
-                album_stmt.run(metadata.album, metadata.albumartist[0], metadata.year, metadata.track.of, "art loc dude!!");
-                song_stmt.run(metadata.title, metadata.artist[0], metadata.genre[0], file, metadata.track.no, 1);
-            });
-            // console.log(file);
-            // stmt.run(file, file);
-        }
-    });
+    files.forEach(insertFileIntoDB);
     // stmt.finalize();
     //
     // db.each("SELECT id AS id, title FROM song", function(err, row) {
@@ -61,3 +47,19 @@ db.serialize(function() {
     // });
 });
 // db.close();
+
+function insertFileIntoDB(file){
+    if(file.endsWith('.mp3')) {
+        var readableStream = fs.createReadStream(file);
+        mm(readableStream, function (err, metadata) {
+            if (err) throw err;
+            console.log(file + " "+metadata.year);
+            // console.log();
+            readableStream.close();
+            album_stmt.run(metadata.album, metadata.albumartist[0], metadata.year, metadata.track.of, "art loc dude!!");
+            song_stmt.run(metadata.title, metadata.artist[0], metadata.genre[0], file, metadata.track.no, 1);
+        });
+        // console.log(file);
+        // stmt.run(file, file);
+    }
+}
