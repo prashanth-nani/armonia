@@ -1,54 +1,58 @@
 <!DOCTYPE html>
 <html>
-  <head>
+<head>
     <meta charset="UTF-8">
     <title>Hello World!</title>
-  </head>
-  <body>
-    <h1>Armonia</h1>
-    Electron <script>document.write(process.versions.electron)</script>.
-    Node <script>document.write(process.versions.node)</script>.
-    <div id="stop">Stop</div>
-    <div id="dur">Get duration</div>
-    <div id="cur">Get current time</div>
-    <div id="songlist">
-        <ol></ol>
-    </div>
-  </body>
+</head>
+<body>
+<h1>Armonia</h1>
+Electron
+<script>document.write(process.versions.electron)</script>
+.
+Node
+<script>document.write(process.versions.node)</script>
+.
+<div id="stop">Stop</div>
+<div id="dur">Get duration</div>
+<div id="cur">Get current time</div>
+<div id="songlist">
+    <ol></ol>
+</div>
+</body>
 
-  <script>
-      window.$ = window.jQuery = require("./js/jquery.js");
+<script>
+    window.$ = window.jQuery = require("./src/js/jquery.js");
 
-      var player;
+    var player;
     var playing = false;
 
     var sqlite3 = require('sqlite3').verbose();
     var db = new sqlite3.Database('armonia.db');
 
-    db.each("SELECT id AS id, title, artist, genre, location FROM song ORDER BY title", function(err, row) {
+    db.each("SELECT id AS id, title, artist, genre, location FROM song ORDER BY title", function (err, row) {
 //         console.log(row.id + ": " + row.title);
-        $("#songlist ol").append("<li data-loc=\""+row.location+"\">"+row.title+"</li><br>")
+        $("#songlist ol").append("<li data-loc=\"" + row.location + "\">" + row.title + "</li><br>")
     });
 
     $(function () {
         $("ol").on("click", "li", function () {
-            if(playing) {
-              player.pause();
-              playing = false;
-              console.log("Stopped");
+            if (playing) {
+                player.pause();
+                playing = false;
+                console.log("Stopped");
             }
             let path = $(this).attr("data-loc");
             player = new Audio(path);
             player.play();
-            console.log("playing "+path);
+            console.log("playing " + path);
             playing = true;
         });
         $("#stop").click(function () {
             player.pause();
             playing = false;
         });
-      $("#dur").click(()=>console.log(player.duration));
-      $("#cur").click(()=>console.log(player.currentTime));
+        $("#dur").click(()=>console.log(player.duration));
+        $("#cur").click(()=>console.log(player.currentTime));
     });
-  </script>
+</script>
 </html>
