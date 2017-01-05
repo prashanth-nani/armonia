@@ -141,3 +141,4 @@ function refreshDB() {
 db.serialize(refreshDB); //Modular
 
 //I added this shit in modular
+//And this
