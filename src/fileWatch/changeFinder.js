@@ -12,17 +12,27 @@ let album_art_dir = path.join("..", "..", "resources", "album_arts");
 
 function getFiles(dir, files_) {
     files_ = files_ || [];
-    var files = fs.readdirSync(dir);
-    for (var i in files) {
-        var name = path.join(dir, files[i]);
-        if (fs.statSync(name).isDirectory()) {
-            getFiles(name, files_);
-        } else {
-            if (name.endsWith(".mp3"))
-                files_.push(name);
+    if (fs.existsSync(dir)) {
+        var files = fs.readdirSync(dir);
+        for (var i in files) {
+            var name = path.join(dir, files[i]);
+            if (fs.statSync(name).isDirectory()) {
+                getFiles(name, files_);
+            } else {
+                if (name.endsWith(".mp3"))
+                    files_.push(name);
+            }
         }
     }
     return files_;
+}
+
+function getMultipleFolders(paths) {
+    let allFiles = [];
+    paths.forEach(function (path) {
+        allFiles = allFiles.concat(getFiles(path));
+    });
+    return allFiles;
 }
 
 function deleteFromDB(removed) {
@@ -39,7 +49,7 @@ function addToDB(added) {
             let last_modified = fs.statSync(file).mtime.getTime();
             var readableStream = fs.createReadStream(file);
             mm(readableStream, function (err, metadata) {
-                if (err) console.error("File: "+file+"\n"+err);
+                if (err) console.error("File: " + file + "\n" + err);
                 else {
                     readableStream.close();
 
@@ -120,8 +130,8 @@ function updateModifiedFiles() {
 function refreshDB() {
     db.run("CREATE TABLE if not exists album (id INTEGER PRIMARY KEY NOT NULL, album_name TEXT NOT NULL DEFAULT '', album_artist TEXT DEFAULT 'HELLO' NOT NULL, year INTEGER NOT NULL DEFAULT -1, total INTEGER, UNIQUE(album_name, album_artist, year))");
     db.run("CREATE TABLE if not exists song (id INTEGER PRIMARY KEY NOT NULL, title TEXT, artist TEXT, genre TEXT, location TEXT, track INTEGER, album_id INTEGER, last_modified INTEGER, FOREIGN KEY(album_id) REFERENCES album(id))");
-    let path = "/media/prashanth/body/Music";
-    newList = getFiles(path);
+    let paths = ["/media/prashanth/body/Music", "/media/prashanth/body/Mmmm"];
+    newList = getMultipleFolders(paths);
     db.each("SELECT location FROM song", function (err, row) {
         if (err) throw err;
         presentList.push(row.location);
