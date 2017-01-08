@@ -1,10 +1,12 @@
 'use strict';
 
+// const myDb = require('../database/dbutils');
+import * as myDb from '../database/dbutils';
 const path = require('path');
 const fs = require('fs');
 const mm = require('musicmetadata');
 const sqlite3 = require('sqlite3').verbose();
-const db = new sqlite3.Database(path.join("..", "..", "armonia.db"));
+var db = new sqlite3.Database(path.join("..", "..", "armonia.db"));
 
 let presentList = [];
 let newList = [];
@@ -128,9 +130,8 @@ function updateModifiedFiles() {
 }
 
 function refreshDB() {
-    db.run("CREATE TABLE if not exists album (id INTEGER PRIMARY KEY NOT NULL, album_name TEXT NOT NULL, album_artist TEXT NOT NULL, year INTEGER NOT NULL DEFAULT -1, total INTEGER, UNIQUE(album_name, album_artist, year))");
-    db.run("CREATE TABLE if not exists song (id INTEGER PRIMARY KEY NOT NULL, title TEXT, artist TEXT, genre TEXT, location TEXT, track INTEGER, album_id INTEGER, last_modified INTEGER, FOREIGN KEY(album_id) REFERENCES album(id))");
-    let paths = ["/media/prashanth/body/Music", "/media/prashanth/body/Mmmm"];
+    myDb.createTables(db);
+    let paths = ["/media/prashanth/body/Music/1 Nenokkadine (2014)"];
     newList = getMultipleFolders(paths);
     db.each("SELECT location FROM song", function (err, row) {
         if (err) throw err;
@@ -138,7 +139,4 @@ function refreshDB() {
     }, applyChangesToDB);
 }
 
-db.serialize(refreshDB); //Modular
-
-//I added this shit in modular
-//And this
+db.serialize(refreshDB);
