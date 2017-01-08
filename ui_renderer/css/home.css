@@ -1,0 +1,17 @@
+div#container {
+  height: 100%;
+  width: 100%;
+}
+
+div#container #sidebar {
+  display: inline-block;
+}
+
+div#container #sidebar #menu {
+  height: 100%;
+  width: 35%;
+}
+
+div#container #content {
+  display: inline-block;
+}
