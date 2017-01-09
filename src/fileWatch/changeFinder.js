@@ -54,10 +54,13 @@ export let addToDB = (added) => {
                 else {
                     readableStream.close();
 
-                    let album_id = -1;
+                    // let album_id = -1;
                     let year = metadata.year;
                     let album = metadata.album;
                     let album_artist = metadata.albumartist[0];
+                    let title = metadata.title;
+                    let artist = metadata.artist[0];
+                    let genre = metadata.genre[0];
 
                     if (year != "" || year != null)
                         year = year.substr(0, 4);
@@ -67,6 +70,12 @@ export let addToDB = (added) => {
                         album = "Unknown";
                     if (album_artist == "" || album_artist == null)
                         album_artist = "Unknown";
+                    if(title == "" || title == null)
+                      title = "Unknown"
+                    if(artist == "" || artist == null)
+                        artist = "Unknown"
+                    if(genre == "" || genre == null)
+                        genre = "Unknown"
 
 
                     album_stmt.run(album, album_artist, year, metadata.track.of, function () {
@@ -75,7 +84,7 @@ export let addToDB = (added) => {
                             else {
                                 album_id = row.id;
                                 createCover(metadata, album_id);
-                                song_stmt.run(metadata.title, metadata.artist[0], metadata.genre[0], file, metadata.track.no, album_id, last_modified);
+                                song_stmt.run(title, artist, genre, file, metadata.track.no, album_id, last_modified);
                             }
                         });
                     });
