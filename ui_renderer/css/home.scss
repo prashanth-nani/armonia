@@ -1,121 +1,177 @@
-@import url('https://fonts.googleapis.com/css?family=Open+Sans:300');
-
-*{
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: 'Open Sans', sans-serif;
-  -webkit-user-select: none;
-  cursor: default;
+@font-face {
+  font-family: 'Open Sans';
+  src:  url('../fonts/OpenSans-Light.ttf');
 }
 
-html, body{
-  height: 100%;
-  width: 100%;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Open Sans', sans-serif;
+    -webkit-user-select: none;
+    cursor: default;
+    :focus {
+        outline: none;
+    }
 }
-
-div#container{
-  height: 100%;
-  width: 100%;
-  font-size: 0px; //To avoid white space issue while using inline-block
-  color: #FFF;
-  #sidebar{
-    position: fixed;
-    background-color: #1d1d1d;
-    font-size: 15px;
-    display: inline-block;
+body,
+html {
     height: 100%;
-    width: 23%;
-    // border: 1px solid green;
-    vertical-align: top;
-    padding: 25px;
-    #hamburger-btn{
-        display: block;
-        height: 10px;
-        margin-bottom: 35px;
-        font-size: 23px;
-    }
-    #search-box{
-      display: block;
-      width: 100%;
-      height: 25px;
-      margin-bottom: 25px;
-      input{
-        width: 100%;
-        height: 100%;
-        border: 1px solid #646c62;
-        padding: 4px;
-        background-color: inherit;
-      }
-    }
-    #menu{
-      ul{
-        list-style-type: none;
-        margin-left: -25px;
-        li{
-          margin-bottom: 15px;
-          cursor: default;
-          padding-left: 25px;
-          i{
-            width: 27px;
-          }
-        }
-      }
-
-    }
-  }
-  #content{
-    margin-left: 23%;
-    font-size: 18px;
-    // border: 1px solid blue;
-    width: 77%;
-    min-height: 100%;
-    vertical-align: top;
-    display: inline-block;
-    padding: 0px 25px 95px;
-    background-color: #000000;
-    #content-title{
-      height: 90px;
-      width: 100%;
-      position: fixed;
-      margin-bottom: 25px;
-      padding: 25px;
-      // border: 1px solid green;
-      background-color: #000000;
-      span{
-        font-size: 30px;
-      }
-    }
-    #controls{
-        height: 40px;
-        position: fixed;
-        background-color: #000000;
-    }
-    #content-list{
-      margin-top: 60px;
-      ul{
-        list-style-type: none;
-        li{
-          // margin-bottom: 10px;
-          padding: 10px 25px;
-          border-bottom: 1px solid #646c62;
-          cursor: default;
-        }
-      }
-    }
-  }
-  #player{
-    background-color: #133e92;
-    height: 50px;
     width: 100%;
-    position: fixed;
-    top: calc(100% - 50px);
-  }
 }
-
-
-.selected{
-  color: #2a59ac;
-  padding-left: 25px;
-  border-left: 2px solid #2a59ac;
+#content-list::-webkit-scrollbar {
+    width: 0.5em;
+    background-color: #2a2a2d;
+    border-radius: 5px;
+    height: calc(100% - 45px);
+}
+#content-list::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+}
+#content-list::-webkit-scrollbar-thumb {
+    background-color: #601d86;
+    border-radius: 5px;
+}
+div#container {
+    height: 100%;
+    width: 100%;
+    font-size: 0; //To avoid white space issue while using inline-block
+    color: #FFF;
+    #sidebar {
+        position: fixed;
+        background-color: #1d1d1d;
+        font-size: 15px;
+        display: inline-block;
+        height: 100%;
+        width: 23%;
+        // border: 1px solid green;
+        vertical-align: top;
+        padding: 25px;
+        #hamburger-btn {
+            display: block;
+            height: 10px;
+            margin-bottom: 35px;
+            font-size: 23px;
+        }
+        #search-box {
+            display: block;
+            width: 100%;
+            height: 25px;
+            margin-bottom: 25px;
+            input {
+                width: 100%;
+                height: 100%;
+                border: 1px solid #646c62;
+                padding: 4px;
+                background-color: inherit;
+                color: #FFF;
+            }
+        }
+        #menu {
+            ul {
+                list-style-type: none;
+                margin-left: -25px;
+                li {
+                    margin-bottom: 15px;
+                    cursor: default;
+                    padding-left: 25px;
+                    i {
+                        width: 27px;
+                    }
+                }
+            }
+        }
+    }
+    #content {
+        margin-left: 23%;
+        font-size: 14px;
+        // border: 1px solid blue;
+        overflow-y: hidden;
+        width: 77%;
+        height: 100%;
+        vertical-align: top;
+        display: inline-block;
+        padding: 0 25px 115px;
+        background-color: #000000;
+        #content-title {
+            height: 90px;
+            width: 100%;
+            position: fixed;
+            margin-bottom: 25px;
+            padding: 25px;
+            // border: 1px solid green;
+            background-color: #000000;
+            span {
+                font-size: 30px;
+            }
+        }
+        #controls {
+            height: 40px;
+            position: fixed;
+            background-color: #000000;
+        }
+        #content-list {
+            height: calc(100% - 70px);
+            width: 100%;
+            overflow-y: scroll;
+            overflow-x: hidden;
+            margin-top: 100px;
+            table {
+                border-collapse: collapse;
+                width: 100%;
+                table-layout: fixed;
+                border-spacing: 18px;
+                // border: 1px solid #fff;
+                tbody {
+                    tr {
+                        th.title, td.title {
+                            width: 30%;
+                        }
+                        th.artist, td.artist {
+                            width: 25%;
+                            // text-align: center;
+                        }
+                        th.album, td.album {
+                            width: 25%;
+                            // text-align: center;
+                        }
+                        th.year, td.year {
+                            width: 10%;
+                            // text-align: right;
+                        }
+                        th, td {
+                            width: 25%;
+                            white-space: nowrap;
+                            overflow: hidden;
+                            padding: 10px;
+                        }
+                        &:nth-child(even){
+                          background-color: #1d1d1d;
+                        }
+                    }
+                }
+            }
+            ul {
+                list-style-type: none;
+                li {
+                    // margin-bottom: 10px;
+                    padding: 10px 25px;
+                    border-bottom: 1px solid #646c62;
+                    cursor: default;
+                }
+            }
+        }
+    }
+    #player {
+        background-color: #133e92;
+        height: 50px;
+        width: 100%;
+        position: fixed;
+        top: calc(100% - 50px);
+    }
+}
+.selected {
+    color: #2a59ac;
+    padding-left: 25px;
+    border-left: 2px solid #2a59ac;
 }
