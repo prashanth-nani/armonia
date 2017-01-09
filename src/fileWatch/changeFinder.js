@@ -130,7 +130,7 @@ export let updateModifiedFiles = () => {
 
 export let refreshDB = () => {
     myDb.createTables(db);
-    let paths = ["/media/prashanth/body/Music/1 Nenokkadine (2014)"];
+    let paths = ["/media/prashanth/body/Music"];
     newList = getMultipleFolders(paths);
     db.each("SELECT location FROM song", function (err, row) {
         if (err) throw err;

@@ -1,31 +1,52 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" type="text/css" href="css/home.min.css">
-    <title>Hello World!</title>
+    <link rel="stylesheet" type="text/css" href="css/fa/css/font-awesome.min.css">
+    <title>Armonia</title>
 </head>
+
 <body>
-<div id="container">
-    <div id="sidebar">
-        <div id="menu">
-            <ul>
-                <li>Albums</li>
-                <li>Artists</li>
-                <li>Songs</li>
-                <li>Now playing</li>
-            </ul>
+    <div id="container">
+        <div id="sidebar">
+            <div id="hamburger-btn"><i class="fa fa-navicon"></i></div>
+            <div id="search-box">
+              <input type="text" name="name" placeholder="Search">
+            </div>
+            <div id="menu">
+                <ul>
+                    <li><i class="fa fa-camera-retro"></i> Albums</li>
+                    <li><i class="fa fa-user" aria-hidden="false"></i> Artists</li>
+                    <li class="selected"><i class="fa fa-music"></i> Songs</li>
+                    <li><i class="fa fa-signal"></i> Now playing</li>
+                </ul>
+            </div>
+        </div>
+        <div id="content">
+            <div id="content-title">
+              <span>Songs</span>
+            </div>
+            <div id="controls"></div>
+            <div id="content-list">
+                <ul></ul>
+            </div>
+        </div>
+        <div id="player">
+          <div id="song-details">
+            <div id="album-art"></div>
+            <div id="info"></div>
+          </div>
+          <div id="timeline">
+
+          </div>
         </div>
     </div>
-    <div id="content">
-        <div id="content_list">
-            <ul></ul>
-        </div>
-    </div>
-</div>
 </body>
 
 <script>
     require('./js/home_renderer');
 </script>
+
 </html>

@@ -6,9 +6,9 @@ var playing = false;
 var sqlite3 = require('sqlite3').verbose();
 var db = new sqlite3.Database('armonia.db');
 
-let $songlist = $("#content_list ul");
+let $songlist = $("#content-list ul");
 db.each("SELECT id AS id, title, artist, genre, location FROM song ORDER BY title", function (err, row) {
-    $songlist.append(`<li data-loc="${row.location}">${row.title}</li><br>`);
+    $songlist.append(`<li data-loc="${row.location}">${row.title}</li>`);
 });
 
 $(function () {

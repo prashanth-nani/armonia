@@ -1,14 +1,121 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:300');
+
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Open Sans', sans-serif;
+  -webkit-user-select: none;
+  cursor: default;
+}
+
+html, body{
+  height: 100%;
+  width: 100%;
+}
+
 div#container{
   height: 100%;
   width: 100%;
+  font-size: 0px; //To avoid white space issue while using inline-block
+  color: #FFF;
   #sidebar{
+    position: fixed;
+    background-color: #1d1d1d;
+    font-size: 15px;
     display: inline-block;
+    height: 100%;
+    width: 23%;
+    // border: 1px solid green;
+    vertical-align: top;
+    padding: 25px;
+    #hamburger-btn{
+        display: block;
+        height: 10px;
+        margin-bottom: 35px;
+        font-size: 23px;
+    }
+    #search-box{
+      display: block;
+      width: 100%;
+      height: 25px;
+      margin-bottom: 25px;
+      input{
+        width: 100%;
+        height: 100%;
+        border: 1px solid #646c62;
+        padding: 4px;
+        background-color: inherit;
+      }
+    }
     #menu{
-      height: 100%;
-      width: 35%;
+      ul{
+        list-style-type: none;
+        margin-left: -25px;
+        li{
+          margin-bottom: 15px;
+          cursor: default;
+          padding-left: 25px;
+          i{
+            width: 27px;
+          }
+        }
+      }
+
     }
   }
   #content{
+    margin-left: 23%;
+    font-size: 18px;
+    // border: 1px solid blue;
+    width: 77%;
+    min-height: 100%;
+    vertical-align: top;
     display: inline-block;
+    padding: 0px 25px 95px;
+    background-color: #000000;
+    #content-title{
+      height: 90px;
+      width: 100%;
+      position: fixed;
+      margin-bottom: 25px;
+      padding: 25px;
+      // border: 1px solid green;
+      background-color: #000000;
+      span{
+        font-size: 30px;
+      }
+    }
+    #controls{
+        height: 40px;
+        position: fixed;
+        background-color: #000000;
+    }
+    #content-list{
+      margin-top: 60px;
+      ul{
+        list-style-type: none;
+        li{
+          // margin-bottom: 10px;
+          padding: 10px 25px;
+          border-bottom: 1px solid #646c62;
+          cursor: default;
+        }
+      }
+    }
   }
+  #player{
+    background-color: #133e92;
+    height: 50px;
+    width: 100%;
+    position: fixed;
+    top: calc(100% - 50px);
+  }
+}
+
+
+.selected{
+  color: #2a59ac;
+  padding-left: 25px;
+  border-left: 2px solid #2a59ac;
 }
