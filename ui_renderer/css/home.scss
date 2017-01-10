@@ -19,6 +19,7 @@ html {
     height: 100%;
     width: 100%;
 }
+
 #content-list::-webkit-scrollbar {
     width: 0.5em;
     background-color: #2a2a2d;
@@ -110,6 +111,23 @@ div#container {
             position: fixed;
             background-color: #000000;
         }
+        #select-music-dir{
+          width: 100%;
+          border: 1px solid green;
+          padding: 25px;
+          margin-top: 130px;
+          text-align: center;
+          #question{
+            margin-bottom: 20px;
+            span{
+              font-size: 40px;
+            }
+          }
+          a{
+            border: 1px solid #133e92;
+            padding: 5px;
+          }
+        }
         #content-list {
             height: calc(100% - 70px);
             width: 100%;
@@ -172,6 +190,11 @@ div#container {
 }
 .selected {
     color: #2a59ac;
-    padding-left: 25px;
-    border-left: 2px solid #2a59ac;
+    padding-left: 20px;
+    font-weight: bold;
+    border-left: 5px solid #2a59ac;
+}
+
+.hidden{
+  display: none;
 }
