@@ -91,7 +91,7 @@ export let addToDB = (added, callback) => {
                                 song_stmt.run(title, artist, genre, file, metadata.track.no, album_id, last_modified);
                             }
                         }, function () {
-                            typeof callback === 'function' && callback("title");
+                            typeof callback === 'function' && callback();
                         });
                     });
                 }

@@ -19,16 +19,28 @@ $(function () {
     handleEvents();
 });
 
-// createList("title");
-
 function createList(sortElement){
     console.log("Refreshing list");
-  // $songtable.find('tr:gt(0)').remove();
+  $songtable.find('tr:gt(0)').remove();
   db.each(`SELECT song.id as id, title, artist, location, year, album_id, album_name FROM song, album WHERE song.album_id = album.id ORDER BY ${sortElement}`, function (err, row) {
       if(err)
           console.error(err);
       else{
-          if($(`#song-${row.id}`).length==0)
+            $songtable.append(`<tr id="song-${row.id}" data-loc="${row.location}" data-album-id="${row.album_id}"><td class="title">${row.title}</td><td class="artist">${row.artist}</td><td class="album">${row.album_name}</td><td class="year">${row.year}</td></tr>`);
+      }
+  }, function(){
+      // manageFiles();
+      showMusic();
+  });
+}
+
+function insertSongRow(){
+    let sortElement = "title";
+  db.each(`SELECT song.id as id, title, artist, location, year, album_id, album_name FROM song, album WHERE song.album_id = album.id ORDER BY ${sortElement}`, function (err, row) {
+      if(err)
+          console.error(err);
+      else{
+        if($(`#content-list table >tbody>tr[data-loc="${row.location}"]`).length==0)
             $songtable.append(`<tr id="song-${row.id}" data-loc="${row.location}" data-album-id="${row.album_id}"><td class="title">${row.title}</td><td class="artist">${row.artist}</td><td class="album">${row.album_name}</td><td class="year">${row.year}</td></tr>`);
       }
   }, showMusic);
@@ -73,8 +85,12 @@ function handleEvents() {
 
     $choosefolderbtn.click(()=>{
         "use strict";
-        utils.get_music_dirs(changeFinder.refreshDB);
+        manageFiles();
     });
 }
 
-module.exports.refreshList = createList;
+function manageFiles() {
+  utils.get_music_dirs(changeFinder.refreshDB);
+}
+
+module.exports.refreshList = insertSongRow;
