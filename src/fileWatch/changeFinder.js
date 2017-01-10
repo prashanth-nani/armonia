@@ -4,6 +4,10 @@ import * as myDb from '../database/dbutils';
 import path from 'path';
 import fs from 'fs';
 import mm from 'musicmetadata';
+
+const ui = require(path.join(__dirname, "..", "..", "ui_renderer/js/home_renderer"));
+
+
 const sqlite3 = require('sqlite3').verbose();
 var db = new sqlite3.Database(path.join(__dirname, "..", "..", "armonia.db"));
 
@@ -42,7 +46,7 @@ export let deleteFromDB = (removed) => {
     });
 }
 
-export let addToDB = (added) => {
+export let addToDB = (added, callback) => {
     var album_stmt = db.prepare("INSERT OR IGNORE INTO album (album_name, album_artist, year, total) VALUES (?, ?, ?, ?)");
     var song_stmt = db.prepare("INSERT INTO song(title, artist, genre, location, track, album_id, last_modified) VALUES (?, ?, ?, ?, ?, ?, ?)");
     added.forEach(function (file) {
@@ -86,6 +90,8 @@ export let addToDB = (added) => {
                                 createCover(metadata, album_id);
                                 song_stmt.run(title, artist, genre, file, metadata.track.no, album_id, last_modified);
                             }
+                        }, function () {
+                            typeof callback === 'function' && callback("title");
                         });
                     });
                 }
@@ -101,9 +107,9 @@ export let createCover = (metadata, album_id) => {
         fs.stat(filePath, function (err, stat) {
             if (err != null) {
                 if (err.code == 'ENOENT') {
-                    fs.writeFile(path.join("..", "..", "resources", "album_arts", album_art_name), metadata.picture[0].data, function (err) {
-                        if (err)
-                            console.error(err);
+                    fs.writeFile(path.join("..", "..", "resources", "album_arts", album_art_name), metadata.picture[0].data, function (error) {
+                        if (error)
+                            console.error(error);
                     });
                 } else {
                     console.log('Some other error: ', err.code);
@@ -118,13 +124,14 @@ export let applyChangesToDB = () => {
     deleteFromDB(removed);
     console.log("Removed :\n" + removed);
     let added = newList.filter(x => presentList.indexOf(x) < 0);
-    addToDB(added);
+    addToDB(added, ui.refreshList);
     console.log("Added :\n" + added);
     updateModifiedFiles();
 }
 
 
 export let updateModifiedFiles = () => {
+    console.log("Updating modified files");
     presentList.forEach(function (file) {
         if (fs.existsSync(file)) {
             let last_modified = fs.statSync(file).mtime.getTime();
@@ -137,16 +144,17 @@ export let updateModifiedFiles = () => {
     });
 }
 
-export let refreshDB = () => {
+export let refreshDB = (musicDir) => {
     myDb.createTables(db);
-    let paths = ["/media/prashanth/body/Music"];
-    newList = getMultipleFolders(paths);
+    newList = getMultipleFolders(musicDir);
     db.each("SELECT location FROM song", function (err, row) {
         if (err) throw err;
         presentList.push(row.location);
     }, applyChangesToDB);
 }
 
-export let startRefresh = () => {
-    db.serialize(refreshDB);
+export let startRefresh = (musicDir) => {
+    db.serialize(()=>{
+        refreshDB(musicDir);
+    });
 };
