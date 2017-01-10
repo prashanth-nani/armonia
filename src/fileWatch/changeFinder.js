@@ -5,7 +5,7 @@ import path from 'path';
 import fs from 'fs';
 import mm from 'musicmetadata';
 const sqlite3 = require('sqlite3').verbose();
-var db = new sqlite3.Database(path.join("..", "..", "armonia.db"));
+var db = new sqlite3.Database(path.join(__dirname, "..", "..", "armonia.db"));
 
 let presentList = [];
 let newList = [];
@@ -54,7 +54,7 @@ export let addToDB = (added) => {
                 else {
                     readableStream.close();
 
-                    // let album_id = -1;
+                    let album_id = -1;
                     let year = metadata.year;
                     let album = metadata.album;
                     let album_artist = metadata.albumartist[0];
