@@ -11,8 +11,11 @@ Built upon github's electron.
 ## To be implemented:
 - Playlists
 - Other controls (Previous, next, repeat, shuffle)
+- Settings
+- Auto detect new music files on app restart
 - Search
 - Remaining sections on the sidebar
+- Control with Music keys
 - Themes
 - Music tag editing
 
@@ -20,4 +23,5 @@ Built upon github's electron.
 ![Songs view](./Screenshot1.png)
 
 ![Songs view](./Screenshot2.png)
+
 #### License [CC0 1.0 (Public Domain)](LICENSE.md)
