@@ -90,7 +90,7 @@ function handleEvents() {
 }
 
 function manageFiles() {
-  utils.get_music_dirs(changeFinder.refreshDB);
+  utils.getMusicDirs(changeFinder.refreshDB);
 }
 
 module.exports.refreshList = insertSongRow;
