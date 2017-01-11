@@ -1,8 +1,7 @@
 @font-face {
-  font-family: 'Open Sans';
-  src:  url('../fonts/OpenSans-Light.ttf');
+    font-family: 'Open Sans';
+    src: url('../fonts/OpenSans-Light.ttf');
 }
-
 * {
     margin: 0;
     padding: 0;
@@ -19,7 +18,6 @@ html {
     height: 100%;
     width: 100%;
 }
-
 #content-list::-webkit-scrollbar {
     width: 0.5em;
     background-color: #2a2a2d;
@@ -33,6 +31,7 @@ html {
     background-color: #601d86;
     border-radius: 5px;
 }
+/*Important!!  Container has font-size zero. Font-size must be set for inner inline elements for them to be visible*/
 div#container {
     height: 100%;
     width: 100%;
@@ -111,22 +110,22 @@ div#container {
             position: fixed;
             background-color: #000000;
         }
-        #select-music-dir{
-          width: 100%;
-          border: 1px solid green;
-          padding: 25px;
-          margin-top: 130px;
-          text-align: center;
-          #question{
-            margin-bottom: 20px;
-            span{
-              font-size: 40px;
+        #select-music-dir {
+            width: 100%;
+            border: 1px solid green;
+            padding: 25px;
+            margin-top: 130px;
+            text-align: center;
+            #question {
+                margin-bottom: 20px;
+                span {
+                    font-size: 40px;
+                }
             }
-          }
-          a{
-            border: 1px solid #133e92;
-            padding: 5px;
-          }
+            a {
+                border: 1px solid #133e92;
+                padding: 5px;
+            }
         }
         #content-list {
             height: calc(100% - 70px);
@@ -142,29 +141,34 @@ div#container {
                 // border: 1px solid #fff;
                 tbody {
                     tr {
-                        th.title, td.title {
+                        td.title,
+                        th.title {
                             width: 30%;
                         }
-                        th.artist, td.artist {
+                        td.artist,
+                        th.artist {
                             width: 25%;
                             // text-align: center;
                         }
-                        th.album, td.album {
+                        td.album,
+                        th.album {
                             width: 25%;
                             // text-align: center;
                         }
-                        th.year, td.year {
+                        td.year,
+                        th.year {
                             width: 10%;
                             // text-align: right;
                         }
-                        th, td {
+                        td,
+                        th {
                             width: 25%;
                             white-space: nowrap;
                             overflow: hidden;
                             padding: 10px;
                         }
-                        &:nth-child(even){
-                          background-color: #1d1d1d;
+                        &:nth-child(even) {
+                            background-color: #1d1d1d;
                         }
                     }
                 }
@@ -182,10 +186,121 @@ div#container {
     }
     #player {
         background-color: #133e92;
-        height: 50px;
+        height: 80px;
         width: 100%;
         position: fixed;
-        top: calc(100% - 50px);
+        top: calc(100% - 80px);
+        font-size: 0;
+        #song-details {
+            overflow: visible;
+            display: inline-block;
+            height: 100%;
+            width: 23%;
+            font-size: 0;
+            #album-art {
+                display: inline-block;
+                height: 100%;
+                width: 80px;
+                img {
+                    height: 100%;
+                    width: auto;
+                    padding: 5px;
+                }
+            }
+            #info {
+                font-size: 15px;
+                vertical-align: top;
+                color: #FFF;
+                display: inline-block;
+                height: 100%;
+                padding: 10px;
+                width: calc(100% - 80px);
+                overflow: hidden;
+                // border: 1px solid green;
+                #info-title {
+                    margin-bottom: 4px;
+                    height: 17px;
+                    width: 100%;
+                    span{
+                      width: 100%;
+                      height: 100%;
+                      overflow: hidden;
+                      display: block;
+                    }
+                }
+                #info-artist {
+                    font-size: 12px;
+                    height: 18px;
+                    width: 100%;
+                    span{
+                      height: 100%;
+                      width: 100%;
+                      overflow: hidden;
+                      display: block;
+                    }
+                }
+            }
+        }
+        #timeline {
+            font-size: 13px;
+            display: inline-block;
+            height: 100%;
+            width: 57%;
+            // border: 1px solid red;
+            vertical-align: top;
+            > div {
+                width: 90%;
+                margin: 29px auto;
+                span#current-time {}
+                > div {
+                  // border: 1px solid red;
+                  display: inline-block;
+                  margin: auto 7px;
+                  width: 83%;
+                  @media (max-width: 840px) {
+                      width: 80%;
+                  }
+                    progress {
+                        margin: 7px 0px;
+                        width: 100%;
+                        height: 1px;
+                        display: inline-block;
+                        -webkit-appearance: none;
+                        border: none;
+                        &::-webkit-progress-bar {
+                            background: #FFF;
+                            border-radius: 50px;
+                        }
+                        &::-webkit-progress-value {
+                            border-radius: 50px;
+                            background: #aa6a2f;
+                            height: 2px;
+                        }
+                    }
+                }
+                span#total-time {}
+            }
+        }
+        #music-buttons {
+            font-size: 15px;
+            display: inline-block;
+            height: 100%;
+            width: 20%;
+            padding: 0 5px;
+            // border: 1px solid #FFF;
+            vertical-align: top;
+            > div {
+                margin: 29px auto;
+                width: 100%;
+                .mbtn {
+                    display: inline-block;
+                    width: 18%;
+                    @media (max-width: 840px) {
+                        width: 17%;
+                    }
+                }
+            }
+        }
     }
 }
 .selected {
@@ -194,7 +309,6 @@ div#container {
     font-weight: bold;
     border-left: 5px solid #2a59ac;
 }
-
-.hidden{
-  display: none;
+.hidden {
+    display: none;
 }

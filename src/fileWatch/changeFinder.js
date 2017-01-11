@@ -107,7 +107,7 @@ export let createCover = (metadata, album_id) => {
         fs.stat(filePath, function (err, stat) {
             if (err != null) {
                 if (err.code == 'ENOENT') {
-                    fs.writeFile(path.join("..", "..", "resources", "album_arts", album_art_name), metadata.picture[0].data, function (error) {
+                    fs.writeFile(path.join(__dirname, "..", "..", "resources", "album_arts", album_art_name), metadata.picture[0].data, function (error) {
                         if (error)
                             console.error(error);
                     });
