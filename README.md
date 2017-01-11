@@ -12,6 +12,7 @@ Built upon github's electron.
 - Other controls (Previous, next, repeat, shuffle)
 - Remaining sections on the sidebar
 - Playlists
+- Search
 
 ## Screenshots:
 ![Songs view](./Screenshot1.png)
