@@ -9,10 +9,12 @@ Built upon github's electron.
 - Album Art
 
 ## To be implemented:
-- Other controls (Previous, next, repeat, shuffle)
-- Remaining sections on the sidebar
 - Playlists
+- Other controls (Previous, next, repeat, shuffle)
 - Search
+- Remaining sections on the sidebar
+- Themes
+- Music tag editing
 
 ## Screenshots:
 ![Songs view](./Screenshot1.png)
