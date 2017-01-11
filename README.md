@@ -4,7 +4,7 @@
 Built upon github's electron.
 
 ## Implemented:
-- Songs Sections
+- Songs Section
 - Play Button
 - Album Art
 
