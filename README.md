@@ -1,7 +1,17 @@
-# Armonia
+# Armonia (Under Development)
 
 **A Cross platformed music player.**
 Built upon github's electron.
+
+## Implemented:
+- Songs Sections
+- Play Button
+- Album Art
+
+## To be implemented:
+- Other controls (Previous, next, repeat, shuffle)
+- Remaining sections on the sidebar
+- Playlists
 
 ## Screenshots:
 ![Songs view](./Screenshot1.png)
