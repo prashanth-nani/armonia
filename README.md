@@ -25,4 +25,26 @@ Built upon github's electron.
 
 ![Songs view](./Screenshot2.png)
 
+## Development:
+### How to run
+- Install git
+- Clone repository
+- Install node >= 7.2.1
+- Install npm >= 3.10.10
+- Run the following commands
+```bash
+cd armonia
+npm install
+npm run compile
+npm start
+```
+### Packaging
+Packaging for linux 64 bit:
+- Run
+```bash
+npm install electron-packager -g
+cd armonia
+electron-packager . --arch=x64 --platform=linux --prune --overwrite
+```
+
 #### License [CC0 1.0 (Public Domain)](LICENSE.md)
