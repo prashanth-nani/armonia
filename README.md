@@ -7,6 +7,7 @@ Built upon github's electron.
 - Songs Section
 - Play Button
 - Album Art
+- Progress bar
 
 ## To be implemented:
 - Playlists
