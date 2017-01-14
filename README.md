@@ -19,6 +19,7 @@ Built upon github's electron.
 - Control with Music keys
 - Themes
 - Music tag editing
+- Equalizer
 
 ## Screenshots:
 ![Songs view](./Screenshot1.png)
