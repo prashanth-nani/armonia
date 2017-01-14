@@ -47,4 +47,4 @@ cd armonia
 electron-packager . --arch=x64 --platform=linux --prune --overwrite
 ```
 
-#### License [CC0 1.0 (Public Domain)](LICENSE.md)
+#### License [MIT License](LICENSE.md)
