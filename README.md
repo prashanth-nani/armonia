@@ -1,6 +1,6 @@
 # Armonia (Under Development)
 
-**A Cross platformed music player.**
+**A Cross platform music player.**
 Built upon github's electron.
 
 ## Implemented:
@@ -25,6 +25,8 @@ Built upon github's electron.
 ![Songs view](./Screenshot1.png)
 
 ![Songs view](./Screenshot2.png)
+
+_Note_: UI is inspired from Windows Groove music
 
 ## Development:
 ### How to run
