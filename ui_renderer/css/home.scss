@@ -224,8 +224,10 @@ div#container {
                     span{
                       width: 100%;
                       height: 100%;
+                      white-space: nowrap;
                       overflow: hidden;
-                      display: block;
+                      text-overflow: ellipsis;
+                      display: inline-block;
                     }
                 }
                 #info-artist {
@@ -233,10 +235,12 @@ div#container {
                     height: 18px;
                     width: 100%;
                     span{
-                      height: 100%;
                       width: 100%;
+                      height: 100%;
+                      white-space: nowrap;
                       overflow: hidden;
-                      display: block;
+                      text-overflow: ellipsis;
+                      display: inline-block;
                     }
                 }
             }
