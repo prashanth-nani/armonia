@@ -7,15 +7,45 @@ Built upon github's electron.
 - Songs Section
 - Play Button
 - Album Art
+- Progress bar
 
 ## To be implemented:
-- Other controls (Previous, next, repeat, shuffle)
-- Remaining sections on the sidebar
 - Playlists
+- Other controls (Previous, next, repeat, shuffle)
+- Settings
+- Auto detect new music files on app restart
 - Search
+- Remaining sections on the sidebar
+- Control with Music keys
+- Themes
+- Music tag editing
+- Equalizer
 
 ## Screenshots:
 ![Songs view](./Screenshot1.png)
 
 ![Songs view](./Screenshot2.png)
-#### License [CC0 1.0 (Public Domain)](LICENSE.md)
+
+## Development:
+### How to run
+- Install git
+- Clone repository
+- Install node >= 7.2.1
+- Install npm >= 3.10.10
+- Run the following commands
+```bash
+cd armonia
+npm install
+npm run compile
+npm start
+```
+### Packaging
+Packaging for linux 64 bit:
+- Run
+```bash
+npm install electron-packager -g
+cd armonia
+electron-packager . --arch=x64 --platform=linux --prune --overwrite
+```
+
+#### License [MIT License](LICENSE.md)
