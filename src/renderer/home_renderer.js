@@ -1,7 +1,7 @@
 const path = require('path');
-const utils = require(path.join(__dirname, "..", "..", "lib/utils/utils"));
-const changeFinder = require(path.join(__dirname, "..", "..", "lib/fileWatch/changeFinder"));
-window.$ = window.jQuery = require(path.join(__dirname, "../..", "lib/js/jquery"));
+const utils = require(path.join(__dirname, "..", "..", "app/utils/utils"));
+const changeFinder = require(path.join(__dirname, "..", "..", "app/fileWatch/changeFinder"));
+window.$ = window.jQuery = require(path.join(__dirname, "../..", "app/js/jquery"));
 
 var player;
 var playing = false;

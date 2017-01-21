@@ -1,8 +1,7 @@
 const {dialog} = require('electron').remote;
 import path from 'path';
 import glob from 'glob';
-// import * as renderer from '../../ui_renderer/js/home_renderer';
-const renderer = require(path.join(__dirname, "..", "..", "ui_renderer", "js", "home_renderer"));
+const renderer = require(path.join(__dirname, "..", "renderer", "home_renderer"));
 
 export let getMusicDirs = (callback) => {
     "use strict";

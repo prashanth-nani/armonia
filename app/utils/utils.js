@@ -17,8 +17,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var dialog = require('electron').remote.dialog;
 
-// import * as renderer from '../../ui_renderer/js/home_renderer';
-var renderer = require(_path2.default.join(__dirname, "..", "..", "ui_renderer", "js", "home_renderer"));
+var renderer = require(_path2.default.join(__dirname, "..", "renderer", "home_renderer"));
 
 var getMusicDirs = exports.getMusicDirs = function getMusicDirs(callback) {
     "use strict";

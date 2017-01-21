@@ -5,7 +5,7 @@ import path from 'path';
 import fs from 'fs';
 import mm from 'musicmetadata';
 
-const ui = require(path.join(__dirname, "..", "..", "ui_renderer/js/home_renderer"));
+const ui = require(path.join(__dirname, "..", "renderer/home_renderer"));
 
 
 const sqlite3 = require('sqlite3').verbose();
