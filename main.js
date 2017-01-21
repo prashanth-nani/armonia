@@ -12,11 +12,13 @@ function createWindow() {
     var lastWindowState = storage.get("lastWindowState");
     if (lastWindowState === null) {
         lastWindowState = {
+            width: 800,
+            height: 600,
             maximized: false
         }
     }
 
-    mainWindow = new BrowserWindow({x: lastWindowState.x, y: lastWindowState.y, minWidth: 800, minHeight: 600, darkTheme: false, title: "Armonia"});
+    mainWindow = new BrowserWindow({x: lastWindowState.x, y: lastWindowState.y, width: lastWindowState.width, height: lastWindowState.height, minWidth: 800, minHeight: 600, darkTheme: false, title: "Armonia"});
 
     if (lastWindowState.maximized) {
         mainWindow.maximize();
@@ -34,9 +36,12 @@ function createWindow() {
 
     mainWindow.on('close', function () {
         var bounds = mainWindow.getBounds();
+        var size = mainWindow.getSize();
         storage.set("lastWindowState", {
             x: bounds.x,
             y: bounds.y,
+            width: size[0],
+            height: size[1],
             maximized: mainWindow.isMaximized()
         });
 
