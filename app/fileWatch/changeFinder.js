@@ -89,10 +89,10 @@ var addToDB = exports.addToDB = function addToDB(added, callback) {
                             var genre = metadata.genre[0];
 
                             if (year != "" || year != null) year = year.substr(0, 4);else year = "Unknown";
-                            if (album == "" || album == null) album = "Unknown";
-                            if (album_artist == "" || album_artist == null) album_artist = "Unknown";
+                            if (album == "" || album == null) album = "Unknown album";
+                            if (album_artist == "" || album_artist == null) album_artist = "Unknown artist";
                             if (title == "" || title == null) title = "Unknown";
-                            if (artist == "" || artist == null) artist = "Unknown";
+                            if (artist == "" || artist == null) artist = "Unknown artist";
                             if (genre == "" || genre == null) genre = "Unknown";
 
                             album_stmt.run(album, album_artist, year, metadata.track.of, function () {

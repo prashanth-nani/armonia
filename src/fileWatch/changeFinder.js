@@ -71,13 +71,13 @@ export let addToDB = (added, callback) => {
                     else
                         year = "Unknown";
                     if (album == "" || album == null)
-                        album = "Unknown";
+                        album = "Unknown album";
                     if (album_artist == "" || album_artist == null)
-                        album_artist = "Unknown";
+                        album_artist = "Unknown artist";
                     if(title == "" || title == null)
                       title = "Unknown"
                     if(artist == "" || artist == null)
-                        artist = "Unknown"
+                        artist = "Unknown artist"
                     if(genre == "" || genre == null)
                         genre = "Unknown"
 
