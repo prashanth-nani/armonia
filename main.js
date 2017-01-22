@@ -34,6 +34,8 @@ function createWindow() {
     // Open the DevTools.
     mainWindow.webContents.openDevTools();
 
+
+    // About to close
     mainWindow.on('close', function () {
         var bounds = mainWindow.getBounds();
         var size = mainWindow.getSize();

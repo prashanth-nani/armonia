@@ -4,16 +4,18 @@ import * as myDb from '../database/dbutils';
 import path from 'path';
 import fs from 'fs';
 import mm from 'musicmetadata';
-
+const remote = require('electron').remote;
+const app = remote.app;
 const ui = require(path.join(__dirname, "..", "renderer/home_renderer"));
 
 
 const sqlite3 = require('sqlite3').verbose();
-var db = new sqlite3.Database(path.join(__dirname, "..", "..", "armonia.db"));
-
+let db_path = path.join(app.getPath('userData'), "armonia.db");
 let presentList = [];
 let newList = [];
-let album_art_dir = path.join("..", "..", "resources", "album_arts");
+let album_art_dir = path.join(app.getPath('userData'), "resources", "album_arts");
+var db = new sqlite3.Database(db_path);
+
 
 export let getFiles = (dir, files_) => {
     files_ = files_ || [];
@@ -107,7 +109,7 @@ export let createCover = (metadata, album_id) => {
         fs.stat(filePath, function (err, stat) {
             if (err != null) {
                 if (err.code == 'ENOENT') {
-                    fs.writeFile(path.join(__dirname, "..", "..", "resources", "album_arts", album_art_name), metadata.picture[0].data, function (error) {
+                    fs.writeFile(path.join(album_art_dir, album_art_name), metadata.picture[0].data, function (error) {
                         if (error)
                             console.error(error);
                     });

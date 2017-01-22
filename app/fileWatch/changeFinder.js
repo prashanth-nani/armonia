@@ -25,14 +25,16 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
+var remote = require('electron').remote;
+var app = remote.app;
 var ui = require(_path2.default.join(__dirname, "..", "renderer/home_renderer"));
 
 var sqlite3 = require('sqlite3').verbose();
-var db = new sqlite3.Database(_path2.default.join(__dirname, "..", "..", "armonia.db"));
-
+var db_path = _path2.default.join(app.getPath('userData'), "armonia.db");
 var presentList = [];
 var newList = [];
-var album_art_dir = _path2.default.join("..", "..", "resources", "album_arts");
+var album_art_dir = _path2.default.join(app.getPath('userData'), "resources", "album_arts");
+var db = new sqlite3.Database(db_path);
 
 var getFiles = exports.getFiles = function getFiles(dir, files_) {
     files_ = files_ || [];
@@ -122,7 +124,7 @@ var createCover = exports.createCover = function createCover(metadata, album_id)
             _fs2.default.stat(filePath, function (err, stat) {
                 if (err != null) {
                     if (err.code == 'ENOENT') {
-                        _fs2.default.writeFile(_path2.default.join(__dirname, "..", "..", "resources", "album_arts", album_art_name), metadata.picture[0].data, function (error) {
+                        _fs2.default.writeFile(_path2.default.join(album_art_dir, album_art_name), metadata.picture[0].data, function (error) {
                             if (error) console.error(error);
                         });
                     } else {

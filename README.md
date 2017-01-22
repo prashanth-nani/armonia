@@ -49,5 +49,3 @@ npm install electron-packager -g
 cd armonia
 electron-packager . --arch=x64 --platform=linux --prune --overwrite
 ```
-
-#### License [MIT License](LICENSE.md)

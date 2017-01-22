@@ -1,22 +1,24 @@
-"use strict";
+'use strict';
 
+var remote = require('electron').remote;
+var app = remote.app;
 var path = require('path');
 var utils = require(path.join(__dirname, "..", "..", "app/utils/utils"));
 var changeFinder = require(path.join(__dirname, "..", "..", "app/fileWatch/changeFinder"));
 window.$ = window.jQuery = require(path.join(__dirname, "../..", "app/js/jquery"));
 
-var player;
-var playing = false;
-
 var sqlite3 = require('sqlite3').verbose();
-var db = new sqlite3.Database(path.join(__dirname, "..", "..", "armonia.db"));
-
+var db_path = path.join(app.getPath('userData'), "armonia.db");
+var albumArtDir = path.join(app.getPath('userData'), "resources", "album_arts");
 var $contentlist = $('#content-list');
 var $songtable = $('#content-list table > tbody');
 var $choosefolderdiv = $('#select-music-dir');
 var $choosefolderbtn = $('#select-music-dir a');
 var $playPauseBtn = $('#play-pause-btn i');
-var albumArtDir = path.join(__dirname, "..", "..", "resources", "album_arts");
+var db = new sqlite3.Database(db_path);
+
+var player;
+var playing = false;
 
 $(function () {
     createList("title");
@@ -26,9 +28,9 @@ $(function () {
 function createList(sortElement) {
     console.log("Refreshing list");
     $songtable.find('tr:gt(0)').remove();
-    db.each("SELECT song.id as id, title, artist, location, year, album_id, album_name FROM song, album WHERE song.album_id = album.id ORDER BY " + sortElement, function (err, row) {
+    db.each('SELECT song.id as id, title, artist, location, year, album_id, album_name FROM song, album WHERE song.album_id = album.id ORDER BY ' + sortElement, function (err, row) {
         if (err) console.error(err);else {
-            $songtable.append("<tr id=\"song-" + row.id + "\" data-loc=\"" + row.location + "\" data-album-id=\"" + row.album_id + "\"><td class=\"title\">" + row.title + "</td><td class=\"artist\">" + row.artist + "</td><td class=\"album\">" + row.album_name + "</td><td class=\"year\">" + row.year + "</td></tr>");
+            $songtable.append('<tr id="song-' + row.id + '" data-loc="' + row.location + '" data-album-id="' + row.album_id + '"><td class="title">' + row.title + '</td><td class="artist">' + row.artist + '</td><td class="album">' + row.album_name + '</td><td class="year">' + row.year + '</td></tr>');
         }
     }, function () {
         // manageFiles();
@@ -38,9 +40,9 @@ function createList(sortElement) {
 
 function insertSongRow() {
     var sortElement = "title";
-    db.each("SELECT song.id as id, title, artist, location, year, album_id, album_name FROM song, album WHERE song.album_id = album.id ORDER BY " + sortElement, function (err, row) {
+    db.each('SELECT song.id as id, title, artist, location, year, album_id, album_name FROM song, album WHERE song.album_id = album.id ORDER BY ' + sortElement, function (err, row) {
         if (err) console.error(err);else {
-            if ($("#content-list table >tbody>tr[data-loc=\"" + row.location + "\"]").length == 0) $songtable.append("<tr id=\"song-" + row.id + "\" data-loc=\"" + row.location + "\" data-album-id=\"" + row.album_id + "\"><td class=\"title\">" + row.title + "</td><td class=\"artist\">" + row.artist + "</td><td class=\"album\">" + row.album_name + "</td><td class=\"year\">" + row.year + "</td></tr>");
+            if ($('#content-list table >tbody>tr[data-loc="' + row.location + '"]').length == 0) $songtable.append('<tr id="song-' + row.id + '" data-loc="' + row.location + '" data-album-id="' + row.album_id + '"><td class="title">' + row.title + '</td><td class="artist">' + row.artist + '</td><td class="album">' + row.album_name + '</td><td class="year">' + row.year + '</td></tr>');
         }
     }, showMusic);
 }
@@ -170,9 +172,9 @@ function getMinutes(seconds) {
     sec = pad(sec, 2);
     if (hr != 0 && hr != undefined) {
         min = pad(min, 2);
-        return hr + ":" + min + ":" + sec;
+        return hr + ':' + min + ':' + sec;
     }
-    return min + ":" + sec;
+    return min + ':' + sec;
 }
 
 function pad(n, width, z) {

@@ -5,6 +5,7 @@ var data = null;
 var dataFilePath = path.join(app.getPath('userData'), 'user-prefs.json');
 
 function load() {
+    console.log(app.getPath('userData'));
     if (data !== null) {
         return;
     }

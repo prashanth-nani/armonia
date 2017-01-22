@@ -1,20 +1,23 @@
+const remote = require('electron').remote;
+const app = remote.app;
 const path = require('path');
 const utils = require(path.join(__dirname, "..", "..", "app/utils/utils"));
 const changeFinder = require(path.join(__dirname, "..", "..", "app/fileWatch/changeFinder"));
 window.$ = window.jQuery = require(path.join(__dirname, "../..", "app/js/jquery"));
 
-var player;
-var playing = false;
-
 var sqlite3 = require('sqlite3').verbose();
-var db = new sqlite3.Database(path.join(__dirname, "..", "..", "armonia.db"));
-
+let db_path = path.join(app.getPath('userData'), "armonia.db");
+let albumArtDir = path.join(app.getPath('userData'), "resources", "album_arts");
 let $contentlist = $('#content-list');
 let $songtable = $('#content-list table > tbody');
 let $choosefolderdiv = $('#select-music-dir');
 let $choosefolderbtn = $('#select-music-dir a');
 let $playPauseBtn = $('#play-pause-btn i');
-let albumArtDir = path.join(__dirname, "..", "..", "resources", "album_arts");
+var db = new sqlite3.Database(db_path);
+
+
+var player;
+var playing = false;
 
 $(function() {
     createList("title");
