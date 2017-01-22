@@ -28,6 +28,24 @@ Built upon github's electron.
 
 _Note_: UI is inspired from Windows Groove music
 
+## Troubleshooting:
+
+Armonia is currently in development. This implies some things can break after an update (database schemes changes, config...).
+
+If you encounter freezes when starting the app, you can reset Armonia by following these steps:
+
+- Go to the Armonia folder directory
+    - Windows: `%AppData%\Armonia`
+    - OSX: `~/Library/Application Support/Armonia`
+    - Linux: `~/.config/Armonia/` or `$XDG_CONFIG_HOME/Armonia`
+- Delete:
+    - `Armonia.db` file
+    - `user-prefs.json` file
+    - `resources` folder
+- Restart Armonia
+
+If you still get problems after that, please open an issue :)
+
 ## Development:
 ### How to run
 - Install git
