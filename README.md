@@ -3,13 +3,19 @@
 **A Cross platform music player.**
 Built upon github's electron.
 
-## Implemented:
+===
+
+### Implemented
+
 - Songs Section
 - Play Button
 - Album Art
 - Progress bar
 
-## To be implemented:
+===
+
+### To be implemented
+
 - Playlists
 - Other controls (Previous, next, repeat, shuffle)
 - Settings
@@ -21,14 +27,15 @@ Built upon github's electron.
 - Music tag editing
 - Equalizer
 
-## Screenshots:
-![Songs view](./Screenshot1.png)
+===
 
-![Songs view](./Screenshot2.png)
+### Installation
 
-_Note_: UI is inspired from Windows Groove music
+Releases can be found [here](https://github.com/prashanth-nani/armonia/releases). Please note that these are only portable versions.
 
-## Troubleshooting:
+===
+
+### Troubleshooting
 
 Armonia is currently in development. This implies some things can break after an update (database schemes changes, config...).
 
@@ -46,8 +53,20 @@ If you encounter freezes when starting the app, you can reset Armonia by followi
 
 If you still get problems after that, please open an issue :)
 
-## Development:
-### How to run
+===
+
+### Screenshots
+
+![Songs view](./Screenshot1.png)
+
+![Songs view](./Screenshot2.png)
+
+_Note_: UI is inspired from Windows Groove music
+
+===
+
+### Development
+#### How to run
 - Install git
 - Clone repository
 - Install node >= 7.2.1
@@ -59,6 +78,9 @@ npm install
 npm run compile
 npm start
 ```
+
+===
+
 ### Packaging
 Packaging for linux 64 bit:
 - Run
@@ -67,3 +89,5 @@ npm install electron-packager -g
 cd armonia
 electron-packager . --arch=x64 --platform=linux --prune --overwrite
 ```
+
+===
