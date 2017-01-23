@@ -2,6 +2,7 @@
 
 **A Cross platform music player.**
 Built upon github's electron.
+
 _Note:  This product is currently under development_
 
 ===
