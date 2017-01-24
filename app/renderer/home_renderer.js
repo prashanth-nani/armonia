@@ -3,9 +3,9 @@
 var remote = require('electron').remote;
 var app = remote.app;
 var path = require('path');
-var utils = require(path.join(__dirname, "..", "utils", "utils"));
-var changeFinder = require(path.join(__dirname, "..", "fileWatch", "changeFinder"));
-window.$ = window.jQuery = require(path.join(__dirname, "..", "js", "jquery"));
+var utils = require(path.join(__dirname, "..", "..", "app/utils/utils"));
+var changeFinder = require(path.join(__dirname, "..", "..", "app/fileWatch/changeFinder"));
+window.$ = window.jQuery = require(path.join(__dirname, "../..", "app/js/jquery"));
 
 var sqlite3 = require('sqlite3').verbose();
 var db_path = path.join(app.getPath('userData'), "armonia.db");
@@ -189,7 +189,7 @@ function setSongInfo(title, artist) {
 }
 
 function manageFiles() {
-    utils.getMusicDirs(changeFinder.refreshDB);
+    utils.getMusicDirs(changeFinder.startRefresh);
 }
 
 module.exports.refreshList = insertSongRow;

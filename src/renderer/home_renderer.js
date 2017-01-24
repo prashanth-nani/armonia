@@ -191,7 +191,7 @@ function setSongInfo(title, artist) {
 }
 
 function manageFiles() {
-    utils.getMusicDirs(changeFinder.refreshDB);
+    utils.getMusicDirs(changeFinder.startRefresh);
 }
 
 module.exports.refreshList = insertSongRow;
