@@ -1,5 +1,6 @@
-- [ ] clearInterval for progress update function after playend
+- [x] clearInterval for progress update function after playend and pause
 - [ ] Add ellipses for table values
 - [ ] Adjust song info text clipping
 - [ ] Change search box to form and on submit
 - [x] Use userdata path for db and resources instead of project's root folder
+- [ ] Show default album art if it is not available from song metadata
