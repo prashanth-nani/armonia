@@ -3,22 +3,19 @@
 var remote = require('electron').remote;
 var app = remote.app;
 var path = require('path');
-var utils = require(path.join(__dirname, "..", "..", "app/utils/utils"));
-var changeFinder = require(path.join(__dirname, "..", "..", "app/fileWatch/changeFinder"));
-window.$ = window.jQuery = require(path.join(__dirname, "../..", "app/js/jquery"));
+var utils = require('../utils/utils');
+var changeFinder = require('../fileWatch/changeFinder');
+var player = require('../player/player');
+window.$ = window.jQuery = require('../js/jquery');
 
 var sqlite3 = require('sqlite3').verbose();
 var db_path = path.join(app.getPath('userData'), "armonia.db");
-var albumArtDir = path.join(app.getPath('userData'), "resources", "album_arts");
 var $contentlist = $('#content-list');
 var $songtable = $('#content-list table > tbody');
 var $choosefolderdiv = $('#select-music-dir');
 var $choosefolderbtn = $('#select-music-dir a');
-var $playPauseBtn = $('#play-pause-btn i');
-var db = new sqlite3.Database(db_path);
 
-var player;
-var playing = false;
+var db = new sqlite3.Database(db_path);
 
 $(function () {
     createList("title");
@@ -69,27 +66,19 @@ function handleEvents() {
         var path = $(this).attr("data-loc");
         var album_id = $(this).attr("data-album-id");
 
-        setSongInfo(title, artist);
-        setAlbumArt(album_id, undefined);
-        playSong(path);
+        player.playSong(path, title, artist, album_id);
     });
 
     $("#play-pause-btn").click(function () {
-        if (playing) {
-            pauseSong();
-            showPlayBtn();
+        if (player.playing) {
+            player.pauseSong();
         } else {
-            playSong();
-            showPauseBtn();
+            player.playSong();
         }
     });
 
-    $("#dur").click(function () {
-        return console.log(player.duration);
-    });
-    $("#cur").click(function () {
-        return console.log(player.currentTime);
-    });
+    // $("#dur").click(() => console.log(player.duration));
+    // $("#cur").click(() => console.log(player.currentTime));
 
     $choosefolderbtn.click(function () {
         "use strict";
@@ -104,88 +93,8 @@ function handleEvents() {
 
         var totalBarWidth = $div.width();
         var completedPercentage = 100 * progressWidth / totalBarWidth;
-        $('progress').val(completedPercentage);
-        player.currentTime = player.duration * completedPercentage / 100;
+        player.setCurrentTime(completedPercentage);
     });
-}
-
-function playSong(path) {
-    showPauseBtn();
-
-    if (playing) {
-        player.pause();
-        playing = false;
-        console.log("Stopped");
-    }
-
-    if (path) {
-        player = new Audio(path);
-        player.addEventListener('loadedmetadata', function () {
-            $('#total-time').text(getMinutes(player.duration));
-        });
-    }
-    player.play();
-    player.addEventListener('ended', function () {
-        showPlayBtn();
-    });
-
-    setInterval(updateBar, 20);
-    console.log("playing " + path);
-    playing = true;
-}
-
-function pauseSong() {
-    player.pause();
-    playing = false;
-}
-
-function showPauseBtn() {
-    $playPauseBtn.removeClass('fa-play').addClass('fa-pause');
-}
-
-function showPlayBtn() {
-    $playPauseBtn.removeClass('fa-pause').addClass('fa-play');
-}
-
-function setAlbumArt(album_id, albumArtPath) {
-    console.log("here");
-    if (albumArtPath == undefined) {
-        console.log("love");
-        utils.getAlbumArtPathById(albumArtDir, album_id);
-    } else if (album_id == undefined) $("#album-art img").attr("src", albumArtPath);
-}
-
-function updateBar() {
-    var currentTime = player.currentTime;
-    $('progress').val(currentTime * 100 / player.duration);
-    $('#current-time').text(getMinutes(currentTime));
-}
-
-function getMinutes(seconds) {
-    var hr = void 0;
-    var min = Math.floor(seconds / 60);
-    var sec = Math.floor(seconds % 60);
-    if (min >= 60) {
-        hr = Math.floor(min / 60);
-        min = Math.floor(min % 60);
-    }
-    sec = pad(sec, 2);
-    if (hr != 0 && hr != undefined) {
-        min = pad(min, 2);
-        return hr + ':' + min + ':' + sec;
-    }
-    return min + ':' + sec;
-}
-
-function pad(n, width, z) {
-    z = z || '0';
-    n = n + '';
-    return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n;
-}
-
-function setSongInfo(title, artist) {
-    $('#info-title span').text(title);
-    $('#info-artist span').text(artist);
 }
 
 function manageFiles() {
@@ -193,4 +102,3 @@ function manageFiles() {
 }
 
 module.exports.refreshList = insertSongRow;
-module.exports.setAlbumArt = setAlbumArt;
