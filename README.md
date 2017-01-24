@@ -1,7 +1,9 @@
-# Armonia (Under Development)
+# Armonia
 
 **A Cross platform music player.**
 Built upon github's electron.
+
+_Note:  This product is currently under development_
 
 ===
 
@@ -31,7 +33,7 @@ Built upon github's electron.
 
 ### Installation
 
-Releases can be found [here](https://github.com/prashanth-nani/armonia/releases). Please note that these are only portable versions.
+Releases can be found [here](https://github.com/prashanth-nani/armonia/releases). Please note that these are only portable versions. Installers will be provided once the remaining features are implemented.
 
 ===
 
