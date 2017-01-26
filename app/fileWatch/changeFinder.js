@@ -28,6 +28,7 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 var remote = require('electron').remote;
 var app = remote.app;
 var ui = require(_path2.default.join(__dirname, "..", "renderer/home_renderer"));
+var storage = require('../utils/storage');
 
 var sqlite3 = require('sqlite3').verbose();
 var db_path = _path2.default.join(app.getPath('userData'), "armonia.db");
@@ -62,7 +63,7 @@ var getMultipleFolders = exports.getMultipleFolders = function getMultipleFolder
 
 var deleteFromDB = exports.deleteFromDB = function deleteFromDB(removed) {
     removed.forEach(function (file) {
-        db.run("DELETE from song WHERE location=(?)", file);
+        db.run("DELETE from song WHERE location=(?)", [file], ui.createList);
     });
 };
 
@@ -173,8 +174,9 @@ var refreshDB = exports.refreshDB = function refreshDB(musicDir) {
     }, applyChangesToDB);
 };
 
-var startRefresh = exports.startRefresh = function startRefresh(musicDir) {
+var startRefresh = exports.startRefresh = function startRefresh() {
     db.serialize(function () {
-        refreshDB(musicDir);
+        var musicDir = storage.get("musicDirs");
+        if (musicDir) refreshDB(musicDir);
     });
 };

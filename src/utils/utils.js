@@ -1,12 +1,26 @@
 const {dialog} = require('electron').remote;
 import path from 'path';
 import glob from 'glob';
+const storage = require('../utils/storage');
 const player_ui = require('../player/player_ui');
 const renderer = require('../renderer/home_renderer');
+const changeFinder = require('../fileWatch/changeFinder');
 
-export let getMusicDirs = (callback) => {
+export let chooseMusicDirs = () => {
     "use strict";
-    dialog.showOpenDialog({properties: ['openDirectory', 'multiSelections']}, callback);
+    dialog.showOpenDialog({properties: ['openDirectory', 'multiSelections']}, updateMusicDirs);
+};
+
+let updateMusicDirs = (musicDir) => {
+    let presentDirs = storage.get("musicDirs");
+    if(presentDirs != null)
+        presentDirs.push(...musicDir);
+    else
+        presentDirs = musicDir;
+    if(presentDirs)
+        presentDirs = Array.from(new Set(presentDirs));
+    storage.set("musicDirs", presentDirs);
+    changeFinder.startRefresh();
 };
 
 export let getAlbumArtPathById = (albumArtDir, album_id)=>{
