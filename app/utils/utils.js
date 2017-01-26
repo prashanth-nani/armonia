@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.getMinutes = exports.getAlbumArtPathById = exports.getMusicDirs = undefined;
+exports.getMinutes = exports.getAlbumArtPathById = exports.chooseMusicDirs = undefined;
 
 var _path = require('path');
 
@@ -15,15 +15,29 @@ var _glob2 = _interopRequireDefault(_glob);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
 var dialog = require('electron').remote.dialog;
 
+var storage = require('../utils/storage');
 var player_ui = require('../player/player_ui');
 var renderer = require('../renderer/home_renderer');
+var changeFinder = require('../fileWatch/changeFinder');
 
-var getMusicDirs = exports.getMusicDirs = function getMusicDirs(callback) {
+var chooseMusicDirs = exports.chooseMusicDirs = function chooseMusicDirs() {
     "use strict";
 
-    dialog.showOpenDialog({ properties: ['openDirectory', 'multiSelections'] }, callback);
+    dialog.showOpenDialog({ properties: ['openDirectory', 'multiSelections'] }, updateMusicDirs);
+};
+
+var updateMusicDirs = function updateMusicDirs(musicDir) {
+    var _presentDirs;
+
+    var presentDirs = storage.get("musicDirs");
+    if (presentDirs != null) (_presentDirs = presentDirs).push.apply(_presentDirs, _toConsumableArray(musicDir));else presentDirs = musicDir;
+    if (presentDirs) presentDirs = Array.from(new Set(presentDirs));
+    storage.set("musicDirs", presentDirs);
+    changeFinder.startRefresh();
 };
 
 var getAlbumArtPathById = exports.getAlbumArtPathById = function getAlbumArtPathById(albumArtDir, album_id) {

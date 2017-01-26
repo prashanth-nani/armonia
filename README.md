@@ -49,7 +49,7 @@ If you encounter freezes when starting the app, you can reset Armonia by followi
     - Linux: `~/.config/Armonia/` or `$XDG_CONFIG_HOME/Armonia`
 - Delete:
     - `Armonia.db` file
-    - `user-prefs.json` file
+    - `config.json` file
     - `resources` folder
 - Restart Armonia
 

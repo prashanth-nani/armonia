@@ -7,6 +7,7 @@ import mm from 'musicmetadata';
 const remote = require('electron').remote;
 const app = remote.app;
 const ui = require(path.join(__dirname, "..", "renderer/home_renderer"));
+const storage = require('../utils/storage');
 
 
 const sqlite3 = require('sqlite3').verbose();
@@ -44,7 +45,7 @@ export let getMultipleFolders = (paths) => {
 
 export let deleteFromDB = (removed) => {
     removed.forEach(function (file) {
-        db.run("DELETE from song WHERE location=(?)", file);
+        db.run("DELETE from song WHERE location=(?)", [file], ui.createList);
     });
 }
 
@@ -155,8 +156,10 @@ export let refreshDB = (musicDir) => {
     }, applyChangesToDB);
 }
 
-export let startRefresh = (musicDir) => {
+export let startRefresh = () => {
     db.serialize(()=>{
-        refreshDB(musicDir);
+        let musicDir = storage.get("musicDirs");
+        if(musicDir)
+            refreshDB(musicDir);
     });
 };

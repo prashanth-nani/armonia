@@ -16,12 +16,14 @@ let $choosefolderbtn = $('#select-music-dir a');
 var db = new sqlite3.Database(db_path);
 
 $(function() {
-    createList("title");
+    changeFinder.startRefresh();
+    createList();
     handleEvents();
 });
 
-function createList(sortElement) {
+export let createList = () => {
     console.log("Refreshing list");
+    let sortElement = "title"; //Load from config
     $songtable.find('tr:gt(0)').remove();
     db.each(`SELECT song.id as id, title, artist, location, year, album_id, album_name FROM song, album WHERE song.album_id = album.id ORDER BY ${sortElement}`, function(err, row) {
         if (err)
@@ -30,7 +32,6 @@ function createList(sortElement) {
             $songtable.append(`<tr id="song-${row.id}" data-loc="${row.location}" data-album-id="${row.album_id}"><td class="title">${row.title}</td><td class="artist">${row.artist}</td><td class="album">${row.album_name}</td><td class="year">${row.year}</td></tr>`);
         }
     }, function() {
-        // manageFiles();
         showMusic();
     });
 }
@@ -86,7 +87,7 @@ function handleEvents() {
 
     $choosefolderbtn.click(() => {
         "use strict";
-        manageFiles();
+        utils.chooseMusicDirs();
     });
 
     $('#progress-outer').bind('click', function(ev) {
