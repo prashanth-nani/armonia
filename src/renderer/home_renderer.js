@@ -42,7 +42,7 @@ export let createSongList = () => {
         if (err)
             console.error(err);
         else {
-            $songtable.append(`<tr id="song-${row.id}" data-loc="${row.location}" data-album-id="${row.album_id}"><td class="title">${row.title}</td><td class="artist">${row.artist}</td><td class="album">${row.album_name}</td><td class="year">${row.year}</td></tr>`);
+            $songtable.append(`<tr id="song-${row.id}" class="song-table-row" data-loc="${row.location}" data-album-id="${row.album_id}"><td class="title">${row.title}</td><td class="artist">${row.artist}</td><td class="album">${row.album_name}</td><td class="year">${row.year}</td></tr>`);
         }
     }, function() {
         showMusic();
@@ -57,7 +57,7 @@ function insertSongRow() {
             console.error(err);
         else {
             if ($(`#content-list table >tbody>tr[data-loc="${row.location}"]`).length == 0)
-                $songtable.append(`<tr id="song-${row.id}" data-loc="${row.location}" data-album-id="${row.album_id}"><td class="title">${row.title}</td><td class="artist">${row.artist}</td><td class="album">${row.album_name}</td><td class="year">${row.year}</td></tr>`);
+                $songtable.append(`<tr id="song-${row.id}" class="song-table-row" data-loc="${row.location}" data-album-id="${row.album_id}"><td class="title">${row.title}</td><td class="artist">${row.artist}</td><td class="album">${row.album_name}</td><td class="year">${row.year}</td></tr>`);
         }
     }, showMusic);
 }
@@ -84,23 +84,23 @@ let playFromTag = (rowElem) => {
     let path = $(rowElem).attr("data-loc");
     let album_id = $(rowElem).attr("data-album-id");
 
-
-    if(!$(rowElem).is(':nth-child(2)'))
-        prevElement = $(rowElem).prev();
-    else {
-        prevElement = undefined;
-        console.log("First child");
-    }
-
-    console.log(prevElement);
-
-    if(!$(rowElem).is(':last-child'))
-        nextElement = $(rowElem).next();
-    else
-        nextElement = undefined;
-
+    setPrevAndNextElem($(rowElem));
 
     player.playSong(path, title, artist, album_id);
+};
+
+let setPrevAndNextElem = (playingElem)=>{
+    "use strict";
+    if(!playingElem.is(':nth-child(2)'))
+        prevElement = playingElem.prev();
+    else {
+        prevElement = undefined;
+    }
+
+    if(!playingElem.is(':last-child'))
+        nextElement = playingElem.next();
+    else
+        nextElement = undefined;
 };
 
 export let playNextSong = () => {
@@ -118,15 +118,24 @@ export let playPreviousSong = () => {
 let savePlaylistState = () => {
     "use strict";
     playingRowIdBeforeSort = $('#content-list table >tbody>tr.selected').attr('id');
-    console.log(playingRowIdBeforeSort);
 };
 
 let restorePlaylistState = () => {
     "use strict";
     let $playingElem = $(`#${playingRowIdBeforeSort}`);
+    $('#content-list table >tbody>tr.selected').removeClass("selected");
     $playingElem.addClass("selected");
-    nextElement = $playingElem.next();
-    prevElement = $playingElem.prev();
+
+    setPrevAndNextElem($playingElem);
+};
+
+$.fn.randomize = function(selector){
+    var $elems = selector ? $(this).find(selector) : $(this).children();
+    for (var i = $elems.length; i >= 0; i--) {
+        $(this).append($elems[Math.random() * i | 0]);
+    }
+    restorePlaylistState();
+    return this;
 };
 
 function handleEvents() {
@@ -149,6 +158,11 @@ function handleEvents() {
 
     $("#next-btn").click(function () {
         playNextSong();
+    });
+
+    $('#shuffle-btn').click(function () {
+        savePlaylistState();
+        $songtable.randomize('.song-table-row');
     });
 
     $choosefolderbtn.click(() => {
