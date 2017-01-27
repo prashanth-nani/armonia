@@ -3,7 +3,8 @@
 **A Cross platform music player.**
 Built upon github's electron.
 
-_Note:  This product is currently under development. Visit [wiki](https://github.com/prashanth-nani/armonia/wiki) for the current status of the project._
+_Note:  This product is currently under development. Visit [wiki](https://github.com/prashanth-nani/armonia/wiki/Armonia) for the current status of the project._
+
 ===
 
 ### Installation
