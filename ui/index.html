@@ -13,70 +13,88 @@
         <div id="sidebar">
             <div id="hamburger-btn"><i class="fa fa-navicon"></i></div>
             <div id="search-box">
-              <input type="text" name="name" placeholder="Search">
+                <input type="text" name="name" placeholder="Search">
             </div>
             <div id="menu">
                 <ul>
-                    <li title="NI"><i class="fa fa-camera-retro"></i> Albums</li>
-                    <li title="NI"><i class="fa fa-user" aria-hidden="false"></i> Artists</li>
+                    <!--<li title="NI"><i class="fa fa-camera-retro"></i> Albums</li>-->
+                    <!--<li title="NI"><i class="fa fa-user" aria-hidden="false"></i> Artists</li>-->
                     <li class="selected"><i class="fa fa-music"></i> Songs</li>
-                    <li title="NI"><i class="fa fa-signal"></i> Now playing</li>
+                    <!--<li title="NI"><i class="fa fa-signal"></i> Now playing</li>-->
                 </ul>
             </div>
             <div id="settings"></div>
         </div>
         <div id="content">
-            <div id="content-title">
-              <span>Songs</span>
+            <div id="content-header">
+                <div id="content-title">
+                    <span>Songs</span>
+                </div>
+                <div id="controls">
+                    <div class="ui-field-contain">
+                    <label for="select-sort-by">Sort by:</label>
+                    <select name="select-sort-by" id="select-sort-by" data-native-menu="false">
+                        <option value="title">Title</option>
+                        <option value="album_name">Album</option>
+                        <option value="artist">Artist</option>
+                        <option value="year">Year</option>
+                        <option value="id">Date Added</option>
+                    </select>
+                </div>
+                </div>
             </div>
-            <div id="controls"></div>
             <div id="select-music-dir" class="hidden">
-              <div id="question">
-                <span>Where is your Music?</span>
-              </div>
-              <a>Choose folders</a>
+                <div id="question">
+                    <span>Where is your Music?</span>
+                </div>
+                <a>Choose folders</a>
             </div>
             <div id="content-list" class="hidden">
-              <table border="0">
-                <tbody>
-                  <tr><th class="title">Title</th><th class="artist">Artist</th><th class="album">Album</th><th class="year">Year</th></tr>
-                </tbody>
-              </table>
+                <table border="0">
+                    <tbody>
+                        <tr>
+                            <th class="title">Title</th>
+                            <th class="artist">Artist</th>
+                            <th class="album">Album</th>
+                            <th class="year">Year</th>
+                        </tr>
+                    </tbody>
+                </table>
                 <ul></ul>
             </div>
         </div>
         <div id="player">
-          <div id="song-details">
-            <div id="album-art">
-              <img src="">
+            <div id="song-details">
+                <div id="album-art">
+                    <img src="">
+                </div>
+                <div id="info">
+                    <div id="info-title">
+                        <span></span>
+                    </div>
+                    <div id="info-artist">
+                        <span></span>
+                    </div>
+                </div>
             </div>
-            <div id="info">
-              <div id="info-title">
-                <span></span>
-              </div>
-              <div id="info-artist">
-                <span></span>
-              </div>
+            <div id="timeline">
+                <div>
+                    <span id="current-time">0:00</span>
+                    <div id="progress-outer">
+                        <progress value="0" max="100"></progress>
+                    </div>
+                    <span id="total-time">0:00</span>
+                </div>
             </div>
-          </div>
-          <div id="timeline">
-            <div>
-              <span id="current-time">0:00</span>
-              <div id="progress-outer">
-                <progress value="0" max="100"></progress>
-              </div>
-              <span id="total-time">0:00</span>
+            <div id="music-buttons">
+                <div>
+                    <span id="previous-btn" class="mbtn" title="Previous NI"><i class="fa fa-step-backward"></i></span>
+                    <span id="play-pause-btn" class="mbtn"><i class="fa fa-play"></i></span>
+                    <span id="next-btn" class="mbtn" title="Next NI"><i class="fa fa-step-forward"></i></span>
+                    <span id="repeat-btn" class="mbtn" title="Repeat NI"><i class="fa fa-repeat"></i></span>
+                    <span id="shuffle-btn" class="mbtn" title="Shuffle NI"><i class="fa fa-random"></i></span>
+                </div>
             </div>
-          </div>
-          <div id="music-buttons">
-              <div>
-                <span id="previous-btn" class="mbtn" title="Previous NI"><i class="fa fa-step-backward"></i></span>
-                <span id="play-pause-btn" class="mbtn"><i class="fa fa-play"></i></span>
-                <span id="next-btn" class="mbtn" title="Next NI"><i class="fa fa-step-forward"></i></span>
-                <span id="repeat-btn" class="mbtn" title="Repeat NI"><i class="fa fa-repeat"></i></span>
-                <span id="shuffle-btn" class="mbtn" title="Shuffle NI"><i class="fa fa-random"></i></span>
-              </div>
-          </div>
         </div>
     </div>
 </body>
