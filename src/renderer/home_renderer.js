@@ -80,7 +80,11 @@ let playFromTag = (rowElem) => {
     let artist = $($(rowElem).children()[1]).text();
     let path = $(rowElem).attr("data-loc");
     let album_id = $(rowElem).attr("data-album-id");
-    nextElement = $(rowElem).next();
+    if(!$(rowElem).is(':last-child'))
+        nextElement = $(rowElem).next();
+    else
+        nextElement = undefined;
+    //console.log(nextElement);
 
     player.playSong(path, title, artist, album_id);
 };

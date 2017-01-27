@@ -79,7 +79,8 @@ var playFromTag = function playFromTag(rowElem) {
     var artist = $($(rowElem).children()[1]).text();
     var path = $(rowElem).attr("data-loc");
     var album_id = $(rowElem).attr("data-album-id");
-    exports.nextElement = nextElement = $(rowElem).next();
+    if (!$(rowElem).is(':last-child')) exports.nextElement = nextElement = $(rowElem).next();else exports.nextElement = nextElement = undefined;
+    //console.log(nextElement);
 
     player.playSong(path, title, artist, album_id);
 };
