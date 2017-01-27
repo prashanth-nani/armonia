@@ -29,7 +29,6 @@ export let getAlbumArtPathById = (albumArtDir, album_id)=>{
         if(err)
             console.error(err);
         else {
-            console.log(files);
             player_ui.setAlbumArt(undefined, files[0]);
         }
     })

@@ -5,6 +5,7 @@
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+var renderer = require('../renderer/home_renderer');
 var player_ui = require('./player_ui');
 
 var playerObj = exports.playerObj = undefined;
@@ -32,6 +33,7 @@ var playSong = exports.playSong = function playSong(path, title, artist, album_i
     playerObj.addEventListener('ended', function () {
         player_ui.showPlayBtn();
         clearInterval(barInterval);
+        renderer.playNextSong();
     });
 
     barInterval = setInterval(function () {

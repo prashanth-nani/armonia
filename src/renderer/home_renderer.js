@@ -13,6 +13,7 @@ let $contentlist = $('#content-list');
 let $songtable = $('#content-list table > tbody');
 let $choosefolderdiv = $('#select-music-dir');
 let $choosefolderbtn = $('#select-music-dir a');
+export let nextElement;
 
 var db = new sqlite3.Database(db_path);
 
@@ -69,18 +70,30 @@ function showMusic() {
     }
 }
 
+let playFromTag = (rowElem) => {
+    "use strict";
+    let $playingrow = $('#content-list table >tbody>tr.selected');
+    $playingrow.removeClass("selected");
+    $(rowElem).addClass("selected");
+
+    let title = $($(rowElem).children()[0]).text();
+    let artist = $($(rowElem).children()[1]).text();
+    let path = $(rowElem).attr("data-loc");
+    let album_id = $(rowElem).attr("data-album-id");
+    nextElement = $(rowElem).next();
+
+    player.playSong(path, title, artist, album_id);
+};
+
+export let playNextSong = () => {
+    "use strict";
+    if (nextElement != undefined)
+        playFromTag(nextElement);
+};
+
 function handleEvents() {
     $songtable.on("dblclick", "tr", function() {
-        let $playingrow = $('#content-list table >tbody>tr.selected');
-        $playingrow.removeClass("selected");
-        $(this).addClass("selected");
-
-        let title = $($(this).children()[0]).text();
-        let artist = $($(this).children()[1]).text();
-        let path = $(this).attr("data-loc");
-        let album_id = $(this).attr("data-album-id");
-
-        player.playSong(path, title, artist, album_id);
+        playFromTag(this);
     });
 
     $("#play-pause-btn").click(function() {
@@ -91,9 +104,6 @@ function handleEvents() {
             player.playSong();
         }
     });
-
-    // $("#dur").click(() => console.log(player.duration));
-    // $("#cur").click(() => console.log(player.currentTime));
 
     $choosefolderbtn.click(() => {
         "use strict";

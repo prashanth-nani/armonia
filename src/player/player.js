@@ -1,6 +1,7 @@
 'use strict';
 
 // const path = require('path');
+const renderer = require('../renderer/home_renderer');
 const player_ui = require('./player_ui');
 
 export var playerObj;
@@ -29,6 +30,7 @@ export let playSong = (path, title, artist, album_id) => {
     playerObj.addEventListener('ended', function () {
         player_ui.showPlayBtn();
         clearInterval(barInterval);
+        renderer.playNextSong();
     });
 
     barInterval = setInterval(function(){player_ui.updateBar(playerObj.currentTime, playerObj.duration)}, 20);

@@ -44,7 +44,6 @@ var getAlbumArtPathById = exports.getAlbumArtPathById = function getAlbumArtPath
     var pathWithoutExt = _path2.default.join(albumArtDir, album_id);
     _glob2.default.glob(pathWithoutExt + '.*', function (err, files) {
         if (err) console.error(err);else {
-            console.log(files);
             player_ui.setAlbumArt(undefined, files[0]);
         }
     });
