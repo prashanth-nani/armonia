@@ -26,6 +26,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 var remote = require('electron').remote;
+var mkdirp = require('mkdirp');
 var app = remote.app;
 var ui = require(_path2.default.join(__dirname, "..", "renderer/home_renderer"));
 var storage = require('../utils/storage');
@@ -175,6 +176,11 @@ var refreshDB = exports.refreshDB = function refreshDB(musicDir) {
 };
 
 var startRefresh = exports.startRefresh = function startRefresh() {
+    var dir = album_art_dir;
+    if (!_fs2.default.existsSync(dir)) {
+        mkdirp.sync(album_art_dir);
+    }
+
     db.serialize(function () {
         var musicDir = storage.get("musicDirs");
         if (musicDir) refreshDB(musicDir);

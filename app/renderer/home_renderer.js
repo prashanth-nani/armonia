@@ -27,8 +27,17 @@ var db = new sqlite3.Database(db_path);
 $(function () {
     changeFinder.startRefresh();
     createSongList();
+    loadUserPrefs();
     handleEvents();
 });
+
+var loadUserPrefs = function loadUserPrefs() {
+    "use strict";
+
+    if (storage.get("repeat") == "on") $("#repeat-btn i").removeClass("disabled");
+    $("#shuffle-btn i").addClass("disabled");
+    storage.set("shuffle", "off");
+};
 
 var createSongList = exports.createSongList = function createSongList() {
     console.log("Refreshing list");
@@ -83,18 +92,6 @@ var playFromTag = function playFromTag(rowElem) {
     var path = $(rowElem).attr("data-loc");
     var album_id = $(rowElem).attr("data-album-id");
 
-    //
-    // if(!$(rowElem).is(':nth-child(2)'))
-    //     prevElement = $(rowElem).prev();
-    // else {
-    //     prevElement = undefined;
-    // }
-    //
-    // if(!$(rowElem).is(':last-child'))
-    //     nextElement = $(rowElem).next();
-    // else
-    //     nextElement = undefined;
-
     setPrevAndNextElem($(rowElem));
 
     player.playSong(path, title, artist, album_id);
@@ -103,11 +100,23 @@ var playFromTag = function playFromTag(rowElem) {
 var setPrevAndNextElem = function setPrevAndNextElem(playingElem) {
     "use strict";
 
+    var repeat = false;
+
+    if (storage.get("repeat") == "on") repeat = true;
+
     if (!playingElem.is(':nth-child(2)')) prevElement = playingElem.prev();else {
-        prevElement = undefined;
+        if (repeat) {
+            prevElement = $('#content-list table >tbody>tr.song-table-row:last-child');
+        } else prevElement = undefined;
     }
 
-    if (!playingElem.is(':last-child')) nextElement = playingElem.next();else nextElement = undefined;
+    if (!playingElem.is(':last-child')) nextElement = playingElem.next();else {
+        if (repeat) {
+            nextElement = $('#content-list table >tbody>tr.song-table-row:nth-child(2)');
+        } else {
+            nextElement = undefined;
+        }
+    }
 };
 
 var playNextSong = exports.playNextSong = function playNextSong() {
@@ -136,16 +145,15 @@ var restorePlaylistState = function restorePlaylistState() {
     $playingElem.addClass("selected");
 
     setPrevAndNextElem($playingElem);
-    // if(!$playingElem.is(':nth-child(2)'))
-    //     prevElement = $playingElem.prev();
-    // else {
-    //     prevElement = undefined;
-    // }
-    //
-    // if(!$playingElem.is(':last-child'))
-    //     nextElement = $playingElem.next();
-    // else
-    //     nextElement = undefined;
+};
+
+var sortList = function sortList() {
+    "use strict";
+
+    var sortByValue = $("#select-sort-by").val();
+    storage.set("songsSortBy", sortByValue);
+    savePlaylistState();
+    createSongList();
 };
 
 $.fn.randomize = function (selector) {
@@ -171,16 +179,34 @@ function handleEvents() {
     });
 
     $("#previous-btn").click(function () {
-        playPreviousSong();
+        if ($('#content-list table >tbody>tr.selected').length == 1) playPreviousSong();
     });
 
     $("#next-btn").click(function () {
-        playNextSong();
+        if ($('#content-list table >tbody>tr.selected').length == 1) playNextSong();
     });
 
-    $('#shuffle-btn').click(function () {
-        savePlaylistState();
-        $songtable.randomize('.song-table-row');
+    $("#repeat-btn i").click(function () {
+        if ($(this).hasClass('disabled')) {
+            $(this).removeClass('disabled');
+            storage.set("repeat", "on");
+        } else {
+            $(this).addClass('disabled');
+            storage.set("repeat", "off");
+        }
+    });
+
+    $('#shuffle-btn i').click(function () {
+        if ($(this).hasClass('disabled')) {
+            storage.set("shuffle", "on");
+            $(this).removeClass('disabled');
+            savePlaylistState();
+            $songtable.randomize('.song-table-row');
+        } else {
+            $(this).addClass('disabled');
+            storage.set("shuffle", "off");
+            sortList();
+        }
     });
 
     $choosefolderbtn.click(function () {
@@ -200,10 +226,7 @@ function handleEvents() {
     });
 
     $("#select-sort-by").change(function () {
-        var sortByValue = $("#select-sort-by").val();
-        storage.set("songsSortBy", sortByValue);
-        savePlaylistState();
-        createSongList();
+        sortList();
     });
 }
 

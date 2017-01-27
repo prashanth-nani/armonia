@@ -22,8 +22,17 @@ var db = new sqlite3.Database(db_path);
 $(function() {
     changeFinder.startRefresh();
     createSongList();
+    loadUserPrefs();
     handleEvents();
 });
+
+let loadUserPrefs = ()=>{
+    "use strict";
+    if(storage.get("repeat") == "on")
+        $("#repeat-btn i").removeClass("disabled");
+    $("#shuffle-btn i").addClass("disabled");
+    storage.set("shuffle", "off");
+};
 
 export let createSongList = () => {
     console.log("Refreshing list");
@@ -91,16 +100,32 @@ let playFromTag = (rowElem) => {
 
 let setPrevAndNextElem = (playingElem)=>{
     "use strict";
+    let repeat = false;
+
+    if(storage.get("repeat") == "on")
+        repeat = true;
+
     if(!playingElem.is(':nth-child(2)'))
         prevElement = playingElem.prev();
     else {
-        prevElement = undefined;
+        if(repeat) {
+            prevElement = $('#content-list table >tbody>tr.song-table-row:last-child');
+        }
+        else
+            prevElement = undefined;
     }
 
     if(!playingElem.is(':last-child'))
         nextElement = playingElem.next();
     else
-        nextElement = undefined;
+    {
+        if(repeat){
+            nextElement = $('#content-list table >tbody>tr.song-table-row:nth-child(2)');
+        }
+        else {
+            nextElement = undefined;
+        }
+    }
 };
 
 export let playNextSong = () => {
@@ -129,6 +154,14 @@ let restorePlaylistState = () => {
     setPrevAndNextElem($playingElem);
 };
 
+let sortList = ()=>{
+    "use strict";
+    let sortByValue = $("#select-sort-by").val();
+    storage.set("songsSortBy", sortByValue);
+    savePlaylistState();
+    createSongList();
+};
+
 $.fn.randomize = function(selector){
     var $elems = selector ? $(this).find(selector) : $(this).children();
     for (var i = $elems.length; i >= 0; i--) {
@@ -153,16 +186,38 @@ function handleEvents() {
     });
 
     $("#previous-btn").click(function () {
-        playPreviousSong();
+        if($('#content-list table >tbody>tr.selected').length==1)
+            playPreviousSong();
     });
 
     $("#next-btn").click(function () {
-        playNextSong();
+        if($('#content-list table >tbody>tr.selected').length==1)
+            playNextSong();
     });
 
-    $('#shuffle-btn').click(function () {
-        savePlaylistState();
-        $songtable.randomize('.song-table-row');
+    $("#repeat-btn i").click(function () {
+        if($(this).hasClass('disabled')) {
+            $(this).removeClass('disabled');
+            storage.set("repeat", "on");
+        }
+        else {
+            $(this).addClass('disabled');
+            storage.set("repeat", "off");
+        }
+    });
+
+    $('#shuffle-btn i').click(function () {
+        if($(this).hasClass('disabled')){
+            storage.set("shuffle", "on");
+            $(this).removeClass('disabled');
+            savePlaylistState();
+            $songtable.randomize('.song-table-row');
+        }
+        else{
+            $(this).addClass('disabled');
+            storage.set("shuffle", "off");
+            sortList();
+        }
     });
 
     $choosefolderbtn.click(() => {
@@ -182,10 +237,7 @@ function handleEvents() {
 
 
     $("#select-sort-by").change(function() {
-        let sortByValue = $("#select-sort-by").val();
-        storage.set("songsSortBy", sortByValue);
-        savePlaylistState();
-        createSongList();
+        sortList();
     });
 }
 

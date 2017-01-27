@@ -5,6 +5,7 @@ import path from 'path';
 import fs from 'fs';
 import mm from 'musicmetadata';
 const remote = require('electron').remote;
+const mkdirp = require('mkdirp');
 const app = remote.app;
 const ui = require(path.join(__dirname, "..", "renderer/home_renderer"));
 const storage = require('../utils/storage');
@@ -157,6 +158,11 @@ export let refreshDB = (musicDir) => {
 }
 
 export let startRefresh = () => {
+    var dir = album_art_dir;
+    if (!fs.existsSync(dir)){
+        mkdirp.sync(album_art_dir);
+    }
+
     db.serialize(()=>{
         let musicDir = storage.get("musicDirs");
         if(musicDir)
