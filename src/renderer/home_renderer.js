@@ -2,6 +2,7 @@ const remote = require('electron').remote;
 const app = remote.app;
 const path = require('path');
 const utils = require('../utils/utils');
+const storage = require('../utils/storage');
 const changeFinder = require('../fileWatch/changeFinder');
 const player = require('../player/player');
 window.$ = window.jQuery = require('../js/jquery');
@@ -17,15 +18,24 @@ var db = new sqlite3.Database(db_path);
 
 $(function() {
     changeFinder.startRefresh();
-    createList();
+    createSongList();
     handleEvents();
 });
 
-export let createList = () => {
+export let createSongList = () => {
     console.log("Refreshing list");
-    let sortElement = "title"; //Load from config
+    let sortElement = storage.get("songsSortBy");
+    let order = "";
+    let reversed = false;
+    if(!sortElement)
+        sortElement = "title";
+    if(reversed)
+    {
+        order = "DESC";
+    }
+    $("#select-sort-by").val(sortElement);
     $songtable.find('tr:gt(0)').remove();
-    db.each(`SELECT song.id as id, title, artist, location, year, album_id, album_name FROM song, album WHERE song.album_id = album.id ORDER BY ${sortElement}`, function(err, row) {
+    db.each(`SELECT song.id as id, title, artist, location, year, album_id, album_name FROM song, album WHERE song.album_id = album.id ORDER BY ${sortElement} ${order}`, function(err, row) {
         if (err)
             console.error(err);
         else {
@@ -99,10 +109,12 @@ function handleEvents() {
         let completedPercentage = (100 * progressWidth) / totalBarWidth;
         player.setCurrentTime(completedPercentage);
     });
-}
 
-function manageFiles() {
-    utils.getMusicDirs(changeFinder.startRefresh);
+    $("#select-sort-by").change(function() {
+        let sortByValue = $("#select-sort-by").val();
+        storage.set("songsSortBy", sortByValue);
+        createSongList();
+    });
 }
 
 module.exports.refreshList = insertSongRow;

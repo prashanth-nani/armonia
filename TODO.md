@@ -5,3 +5,4 @@
 - [x] Use userdata path for db and resources instead of project's root folder
 - [ ] Show default album art if it is not available from song metadata
 - [ ] Show file adding animation
+- [ ] Add reversed order to sort-by

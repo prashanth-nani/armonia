@@ -7,6 +7,7 @@ var remote = require('electron').remote;
 var app = remote.app;
 var path = require('path');
 var utils = require('../utils/utils');
+var storage = require('../utils/storage');
 var changeFinder = require('../fileWatch/changeFinder');
 var player = require('../player/player');
 window.$ = window.jQuery = require('../js/jquery');
@@ -22,15 +23,22 @@ var db = new sqlite3.Database(db_path);
 
 $(function () {
     changeFinder.startRefresh();
-    createList();
+    createSongList();
     handleEvents();
 });
 
-var createList = exports.createList = function createList() {
+var createSongList = exports.createSongList = function createSongList() {
     console.log("Refreshing list");
-    var sortElement = "title"; //Load from config
+    var sortElement = storage.get("songsSortBy");
+    var order = "";
+    var reversed = false;
+    if (!sortElement) sortElement = "title";
+    if (reversed) {
+        order = "DESC";
+    }
+    $("#select-sort-by").val(sortElement);
     $songtable.find('tr:gt(0)').remove();
-    db.each('SELECT song.id as id, title, artist, location, year, album_id, album_name FROM song, album WHERE song.album_id = album.id ORDER BY ' + sortElement, function (err, row) {
+    db.each('SELECT song.id as id, title, artist, location, year, album_id, album_name FROM song, album WHERE song.album_id = album.id ORDER BY ' + sortElement + ' ' + order, function (err, row) {
         if (err) console.error(err);else {
             $songtable.append('<tr id="song-' + row.id + '" data-loc="' + row.location + '" data-album-id="' + row.album_id + '"><td class="title">' + row.title + '</td><td class="artist">' + row.artist + '</td><td class="album">' + row.album_name + '</td><td class="year">' + row.year + '</td></tr>');
         }
@@ -99,10 +107,12 @@ function handleEvents() {
         var completedPercentage = 100 * progressWidth / totalBarWidth;
         player.setCurrentTime(completedPercentage);
     });
-}
 
-function manageFiles() {
-    utils.getMusicDirs(changeFinder.startRefresh);
+    $("#select-sort-by").change(function () {
+        var sortByValue = $("#select-sort-by").val();
+        storage.set("songsSortBy", sortByValue);
+        createSongList();
+    });
 }
 
 module.exports.refreshList = insertSongRow;
