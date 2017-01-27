@@ -21,6 +21,7 @@ _Note:  This product is currently under development_
 - Playlists
 - Other controls (Previous, next, repeat, shuffle)
 - Settings
+- Sort by
 - ~~Auto detect new music files on app restart~~
 - Search
 - Remaining sections on the sidebar
