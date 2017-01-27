@@ -13,7 +13,9 @@ let $contentlist = $('#content-list');
 let $songtable = $('#content-list table > tbody');
 let $choosefolderdiv = $('#select-music-dir');
 let $choosefolderbtn = $('#select-music-dir a');
-export let nextElement;
+let nextElement;
+let prevElement;
+let playingRowIdBeforeSort;
 
 var db = new sqlite3.Database(db_path);
 
@@ -44,8 +46,9 @@ export let createSongList = () => {
         }
     }, function() {
         showMusic();
+        restorePlaylistState();
     });
-}
+};
 
 function insertSongRow() {
     let sortElement = "title";
@@ -80,11 +83,22 @@ let playFromTag = (rowElem) => {
     let artist = $($(rowElem).children()[1]).text();
     let path = $(rowElem).attr("data-loc");
     let album_id = $(rowElem).attr("data-album-id");
+
+
+    if(!$(rowElem).is(':nth-child(2)'))
+        prevElement = $(rowElem).prev();
+    else {
+        prevElement = undefined;
+        console.log("First child");
+    }
+
+    console.log(prevElement);
+
     if(!$(rowElem).is(':last-child'))
         nextElement = $(rowElem).next();
     else
         nextElement = undefined;
-    //console.log(nextElement);
+
 
     player.playSong(path, title, artist, album_id);
 };
@@ -93,6 +107,26 @@ export let playNextSong = () => {
     "use strict";
     if (nextElement != undefined)
         playFromTag(nextElement);
+};
+
+export let playPreviousSong = () => {
+    "use strict";
+    if (prevElement != undefined)
+        playFromTag(prevElement);
+};
+
+let savePlaylistState = () => {
+    "use strict";
+    playingRowIdBeforeSort = $('#content-list table >tbody>tr.selected').attr('id');
+    console.log(playingRowIdBeforeSort);
+};
+
+let restorePlaylistState = () => {
+    "use strict";
+    let $playingElem = $(`#${playingRowIdBeforeSort}`);
+    $playingElem.addClass("selected");
+    nextElement = $playingElem.next();
+    prevElement = $playingElem.prev();
 };
 
 function handleEvents() {
@@ -107,6 +141,14 @@ function handleEvents() {
         else {
             player.playSong();
         }
+    });
+
+    $("#previous-btn").click(function () {
+        playPreviousSong();
+    });
+
+    $("#next-btn").click(function () {
+        playNextSong();
     });
 
     $choosefolderbtn.click(() => {
@@ -124,9 +166,11 @@ function handleEvents() {
         player.setCurrentTime(completedPercentage);
     });
 
+
     $("#select-sort-by").change(function() {
         let sortByValue = $("#select-sort-by").val();
         storage.set("songsSortBy", sortByValue);
+        savePlaylistState();
         createSongList();
     });
 }

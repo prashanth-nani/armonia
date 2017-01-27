@@ -18,7 +18,9 @@ var $contentlist = $('#content-list');
 var $songtable = $('#content-list table > tbody');
 var $choosefolderdiv = $('#select-music-dir');
 var $choosefolderbtn = $('#select-music-dir a');
-var nextElement = exports.nextElement = void 0;
+var nextElement = void 0;
+var prevElement = void 0;
+var playingRowIdBeforeSort = void 0;
 
 var db = new sqlite3.Database(db_path);
 
@@ -45,6 +47,7 @@ var createSongList = exports.createSongList = function createSongList() {
         }
     }, function () {
         showMusic();
+        restorePlaylistState();
     });
 };
 
@@ -79,8 +82,15 @@ var playFromTag = function playFromTag(rowElem) {
     var artist = $($(rowElem).children()[1]).text();
     var path = $(rowElem).attr("data-loc");
     var album_id = $(rowElem).attr("data-album-id");
-    if (!$(rowElem).is(':last-child')) exports.nextElement = nextElement = $(rowElem).next();else exports.nextElement = nextElement = undefined;
-    //console.log(nextElement);
+
+    if (!$(rowElem).is(':nth-child(2)')) prevElement = $(rowElem).prev();else {
+        prevElement = undefined;
+        console.log("First child");
+    }
+
+    console.log(prevElement);
+
+    if (!$(rowElem).is(':last-child')) nextElement = $(rowElem).next();else nextElement = undefined;
 
     player.playSong(path, title, artist, album_id);
 };
@@ -89,6 +99,28 @@ var playNextSong = exports.playNextSong = function playNextSong() {
     "use strict";
 
     if (nextElement != undefined) playFromTag(nextElement);
+};
+
+var playPreviousSong = exports.playPreviousSong = function playPreviousSong() {
+    "use strict";
+
+    if (prevElement != undefined) playFromTag(prevElement);
+};
+
+var savePlaylistState = function savePlaylistState() {
+    "use strict";
+
+    playingRowIdBeforeSort = $('#content-list table >tbody>tr.selected').attr('id');
+    console.log(playingRowIdBeforeSort);
+};
+
+var restorePlaylistState = function restorePlaylistState() {
+    "use strict";
+
+    var $playingElem = $('#' + playingRowIdBeforeSort);
+    $playingElem.addClass("selected");
+    nextElement = $playingElem.next();
+    prevElement = $playingElem.prev();
 };
 
 function handleEvents() {
@@ -102,6 +134,14 @@ function handleEvents() {
         } else {
             player.playSong();
         }
+    });
+
+    $("#previous-btn").click(function () {
+        playPreviousSong();
+    });
+
+    $("#next-btn").click(function () {
+        playNextSong();
     });
 
     $choosefolderbtn.click(function () {
@@ -123,6 +163,7 @@ function handleEvents() {
     $("#select-sort-by").change(function () {
         var sortByValue = $("#select-sort-by").val();
         storage.set("songsSortBy", sortByValue);
+        savePlaylistState();
         createSongList();
     });
 }
