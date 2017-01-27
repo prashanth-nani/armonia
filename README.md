@@ -3,33 +3,7 @@
 **A Cross platform music player.**
 Built upon github's electron.
 
-_Note:  This product is currently under development_
-
-===
-
-### Implemented
-
-- Songs Section
-- Play Button
-- Album Art
-- Progress bar
-
-===
-
-### To be implemented
-
-- Playlists
-- Other controls (Previous, next, repeat, shuffle)
-- Settings
-- Sort by
-- ~~Auto detect new music files on app restart~~
-- Search
-- Remaining sections on the sidebar
-- Control with Music keys
-- Themes
-- Music tag editing
-- Equalizer
-
+_Note:  This product is currently under development. Visit [wiki](https://github.com/prashanth-nani/armonia/wiki) for the current status of the project._
 ===
 
 ### Installation
