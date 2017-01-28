@@ -60,12 +60,18 @@ npm start
 ===
 
 ### Packaging
-Packaging for linux 64 bit:
+Packaging for 64 bit:
 - Run
 ```bash
 npm install electron-packager -g
 cd armonia
-electron-packager . --arch=x64 --platform=linux --prune --overwrite
+# linux:
+electron-packager . --arch=x64 --platform=linux --asar=true --prune --overwrite
+
+#Windows:
+npm install electron-rebuild --save-dev
+node_modules\.bin\electron-rebuild
+electron-packager . --arch=x64 --platform=win32 --asar=true --prune --overwrite
 ```
 
 ===
