@@ -68,7 +68,7 @@ cd armonia
 # linux:
 electron-packager . --arch=x64 --platform=linux --asar=true --prune --overwrite
 
-#Windows:
+#Windows (Build on a windows machine):
 npm install electron-rebuild --save-dev
 node_modules\.bin\electron-rebuild
 electron-packager . --arch=x64 --platform=win32 --asar=true --prune --overwrite
