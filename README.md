@@ -1,3 +1,5 @@
+# THIS PROJECT IS ABANDONED AS IT IS BEING DEVELOPED USING ANGULAR 2 FRAMEWORK [HERE](https://github.com/prashanth-nani/armonia)
+
 # Armonia
 
 **A Cross platform music player.**
